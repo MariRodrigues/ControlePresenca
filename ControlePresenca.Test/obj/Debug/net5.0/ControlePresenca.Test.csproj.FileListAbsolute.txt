@@ -1,0 +1,12 @@
+C:\Users\mari_\source\repos\ControlePresenca\ControlePresenca.Test\bin\Debug\net5.0\ControlePresenca.Test.deps.json
+C:\Users\mari_\source\repos\ControlePresenca\ControlePresenca.Test\bin\Debug\net5.0\ControlePresenca.Test.dll
+C:\Users\mari_\source\repos\ControlePresenca\ControlePresenca.Test\bin\Debug\net5.0\ControlePresenca.Test.pdb
+C:\Users\mari_\source\repos\ControlePresenca\ControlePresenca.Test\obj\Debug\net5.0\ControlePresenca.Test.csproj.AssemblyReference.cache
+C:\Users\mari_\source\repos\ControlePresenca\ControlePresenca.Test\obj\Debug\net5.0\ControlePresenca.Test.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\mari_\source\repos\ControlePresenca\ControlePresenca.Test\obj\Debug\net5.0\ControlePresenca.Test.AssemblyInfoInputs.cache
+C:\Users\mari_\source\repos\ControlePresenca\ControlePresenca.Test\obj\Debug\net5.0\ControlePresenca.Test.AssemblyInfo.cs
+C:\Users\mari_\source\repos\ControlePresenca\ControlePresenca.Test\obj\Debug\net5.0\ControlePresenca.Test.csproj.CoreCompileInputs.cache
+C:\Users\mari_\source\repos\ControlePresenca\ControlePresenca.Test\obj\Debug\net5.0\ControlePresenca.Test.dll
+C:\Users\mari_\source\repos\ControlePresenca\ControlePresenca.Test\obj\Debug\net5.0\refint\ControlePresenca.Test.dll
+C:\Users\mari_\source\repos\ControlePresenca\ControlePresenca.Test\obj\Debug\net5.0\ControlePresenca.Test.pdb
+C:\Users\mari_\source\repos\ControlePresenca\ControlePresenca.Test\obj\Debug\net5.0\ref\ControlePresenca.Test.dll
