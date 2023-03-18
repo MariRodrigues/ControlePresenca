@@ -20,6 +20,8 @@ namespace ControlePresenca.Configurations
             services.AddScoped<IClasseQueries, ClasseQueries>();
             services.AddScoped<IAlunoRepository, AlunoRepository>();
             services.AddScoped<IProfessorRepository, ProfessorRepository>();
+            services.AddScoped<IRelatorioRepository, RelatorioRepository>();
+            services.AddScoped<IPresencaRepository, PresencaRepository>();
 
             var assembly = AppDomain.CurrentDomain.Load("ControlePresenca.Application");
             services.AddMediatR(assembly);
@@ -31,7 +33,6 @@ namespace ControlePresenca.Configurations
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ControlePresenca", Version = "v1" });
             });
-
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

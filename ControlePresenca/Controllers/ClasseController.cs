@@ -1,6 +1,7 @@
 ﻿using ControlePresenca.Application.Commands.Classe;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace ControlePresenca.Controllers
 {
@@ -10,7 +11,7 @@ namespace ControlePresenca.Controllers
     {
         [HttpPost]
         [ProducesResponseType(200)]
-        public IActionResult Cadastrar([FromServices] IMediator mediator, CreateClasseCommand command)
+        public async Task<IActionResult> Cadastrar([FromServices] IMediator mediator, CreateClasseCommand command)
         {
             var response = mediator.Send(command);
             return Ok(response);

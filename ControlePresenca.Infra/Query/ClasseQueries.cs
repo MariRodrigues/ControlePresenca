@@ -1,13 +1,19 @@
 ﻿using ControlePresenca.Domain.Query;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using ControlePresenca.Infra.Data;
+using Microsoft.EntityFrameworkCore;
+using MySql.Data.MySqlClient;
 
 namespace ControlePresenca.Infra.Query
 {
     public class ClasseQueries : IClasseQueries
     {
+        private readonly MySqlConnection _connection;
+
+        public ClasseQueries(AppDbContext context)
+        {
+            _connection = new MySqlConnection(context.Database.GetConnectionString());
+        }
+
+
     }
 }

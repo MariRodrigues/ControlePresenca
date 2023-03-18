@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ControlePresenca.Infra.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230312213604_Primeira migracao")]
-    partial class Primeiramigracao
+    [Migration("20230315013957_novos itens")]
+    partial class novositens
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -61,6 +61,9 @@ namespace ControlePresenca.Infra.Migrations
                     b.Property<int>("AlunoId")
                         .HasColumnType("int");
 
+                    b.Property<bool>("Presente")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<int>("RelatorioId")
                         .HasColumnType("int");
 
@@ -106,6 +109,12 @@ namespace ControlePresenca.Infra.Migrations
 
                     b.Property<string>("Observacao")
                         .HasColumnType("text");
+
+                    b.Property<double>("Oferta")
+                        .HasColumnType("double");
+
+                    b.Property<int>("QuantidadeBiblias")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

@@ -4,7 +4,7 @@ using MySql.EntityFrameworkCore.Metadata;
 
 namespace ControlePresenca.Infra.Migrations
 {
-    public partial class Primeiramigracao : Migration
+    public partial class novositens : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -69,6 +69,8 @@ namespace ControlePresenca.Infra.Migrations
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     Data = table.Column<DateTime>(type: "datetime", nullable: false),
                     Observacao = table.Column<string>(type: "text", nullable: true),
+                    Oferta = table.Column<double>(type: "double", nullable: false),
+                    QuantidadeBiblias = table.Column<int>(type: "int", nullable: false),
                     ClasseId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -89,7 +91,8 @@ namespace ControlePresenca.Infra.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     AlunoId = table.Column<int>(type: "int", nullable: false),
-                    RelatorioId = table.Column<int>(type: "int", nullable: false)
+                    RelatorioId = table.Column<int>(type: "int", nullable: false),
+                    Presente = table.Column<bool>(type: "tinyint(1)", nullable: false)
                 },
                 constraints: table =>
                 {

@@ -26,7 +26,7 @@ namespace ControlePresenca.Application.Handlers.AlunoHandlers
             var classe = await _classeRepository.GetById(request.ClasseId);
 
             if (classe is null)
-                return new ResponseApi(false, "A categoria informada não existe");
+                return new ResponseApi(false, "A classe informada não existe");
 
             var aluno = _mapper.Map<Aluno>(request);
 

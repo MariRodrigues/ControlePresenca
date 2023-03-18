@@ -59,6 +59,9 @@ namespace ControlePresenca.Infra.Migrations
                     b.Property<int>("AlunoId")
                         .HasColumnType("int");
 
+                    b.Property<bool>("Presente")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<int>("RelatorioId")
                         .HasColumnType("int");
 
@@ -104,6 +107,12 @@ namespace ControlePresenca.Infra.Migrations
 
                     b.Property<string>("Observacao")
                         .HasColumnType("text");
+
+                    b.Property<double>("Oferta")
+                        .HasColumnType("double");
+
+                    b.Property<int>("QuantidadeBiblias")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

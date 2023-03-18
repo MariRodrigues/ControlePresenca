@@ -13,6 +13,8 @@ namespace ControlePresenca.Domain.Entities
         public DateTime Data { get; set; }
         public string Observacao { get; set; }
         public virtual Classe Classe { get; set; }
+        public double Oferta { get; set; }
+        public int QuantidadeBiblias { get; set; }
         public int ClasseId { get; set; }
         [JsonIgnore]
         public virtual List<Presenca> Presencas { get; set; }

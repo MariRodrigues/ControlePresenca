@@ -11,5 +11,6 @@ namespace ControlePresenca.Domain.Repository
     {
         Aluno Cadastrar(Aluno aluno);
         public Aluno GetById(int id);
+        IEnumerable<Aluno> GetAllByRelatory(int ClasseId);
     }
 }
