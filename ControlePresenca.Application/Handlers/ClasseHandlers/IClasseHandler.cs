@@ -1,4 +1,4 @@
-﻿using ControlePresenca.Application.Commands.Classe;
+﻿using ControlePresenca.Application.Commands.Classes;
 using ControlePresenca.Application.Response;
 using MediatR;
 using System;

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
-using ControlePresenca.Application.Commands.Presenca;
+using ControlePresenca.Application.Commands.Presencas;
+using ControlePresenca.Application.Commands.Relatorios;
 using ControlePresenca.Domain.Entities;
 
 namespace ControlePresenca.Application.Profiles
@@ -9,6 +10,7 @@ namespace ControlePresenca.Application.Profiles
         public PresencaProfile()
         {
             CreateMap<CreatePresencaCommand, Presenca>();
+            CreateMap<PresencaDTO, Presenca>();
 
         }
     }

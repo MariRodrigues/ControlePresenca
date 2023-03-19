@@ -11,5 +11,6 @@ namespace ControlePresenca.Domain.Repository
     {
         Task<Relatorio> Cadastrar(Relatorio relatorio);
         Task<Relatorio> GetById(int id);
+        Task<bool> Editar(Relatorio relatorio);
     }
 }

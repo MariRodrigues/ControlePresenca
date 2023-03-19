@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
@@ -20,5 +21,14 @@ namespace ControlePresenca.Domain.Entities
         public virtual List<Presenca> Presencas { get; set; }
         [JsonIgnore]
         public virtual List<Visitante> Visitantes { get; set; }
+
+        public void Update(DateTime data, string observacao, double oferta, int quantidadeBiblias, List<Presenca> presencas)
+        {
+            Data = data;
+            Observacao = observacao;
+            Oferta = oferta;
+            QuantidadeBiblias = quantidadeBiblias;
+            Presencas = presencas;
+        }
     }
 }

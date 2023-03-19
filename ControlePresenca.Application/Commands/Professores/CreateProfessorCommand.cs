@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ControlePresenca.Application.Commands.Professor
+namespace ControlePresenca.Application.Commands.Professores
 {
     public class CreateProfessorCommand : IRequest<ResponseApi>
     {

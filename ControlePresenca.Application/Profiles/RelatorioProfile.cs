@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using ControlePresenca.Application.Commands.Relatorio;
+using ControlePresenca.Application.Commands.Relatorios;
 using ControlePresenca.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -14,6 +14,7 @@ namespace ControlePresenca.Application.Profiles
         public RelatorioProfile()
         {
             CreateMap<CreateRelatorioCommand, Relatorio>();
+            CreateMap<EditRelatorioCommand, Relatorio>();
         }
     }
 }

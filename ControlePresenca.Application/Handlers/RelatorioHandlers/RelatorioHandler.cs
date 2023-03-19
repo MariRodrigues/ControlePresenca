@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using ControlePresenca.Application.Commands.Relatorio;
+using ControlePresenca.Application.Commands.Relatorios;
 using ControlePresenca.Application.Response;
 using ControlePresenca.Domain.Entities;
 using ControlePresenca.Domain.Repository;
@@ -56,7 +56,48 @@ namespace ControlePresenca.Application.Handlers.RelatorioHandlers
                 }
             }
 
-            return new ResponseApi(true, "Relatório cadastrado com sucesso");
+            return new ResponseApi(true, "Relatório cadastrado com sucesso") { Id = newRelatorio.Id };
+        }
+
+        public async Task<ResponseApi> Handle(EditRelatorioCommand request, CancellationToken cancellationToken)
+        {
+            var relatorio = await _relatorioRepository.GetById(request.Id);
+
+            if (relatorio is null)
+                return new ResponseApi(false, "O relatório não existe.");
+
+            var presencas = await ValidPresenca(request.Id, request.Presencas);
+
+            if (presencas is null)
+                return new ResponseApi(false, "Há inconsistências nos alunos. ");
+
+            relatorio.Update(request.Data, request.Observacao, request.Oferta, request.QuantidadeBiblias, presencas);
+
+            var response = await _relatorioRepository.Editar(relatorio);
+
+            if (response)
+                return new ResponseApi(true, "Relatório atualizado com sucesso");
+            else
+                return new ResponseApi(false, "Não foi possível atualizar o relatório.");
+        }
+
+        private async Task<List<Presenca>> ValidPresenca(int relatrorioId, List<PresencaDTO> presencaList)
+        {
+            List<Presenca> presencas = new();
+
+            foreach (var newPresenca in presencaList)
+            {
+                var presenca = await _presencaRepository.GetByAlunoRelatorioId(newPresenca.AlunoId, relatrorioId);
+
+                if (presenca is null)
+                    return null;
+
+                presenca.Presente = newPresenca.Presente;
+
+                presencas.Add(presenca);
+            }
+
+            return presencas;
         }
     }
 }

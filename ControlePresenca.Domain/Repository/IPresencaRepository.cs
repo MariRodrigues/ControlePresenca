@@ -11,5 +11,6 @@ namespace ControlePresenca.Domain.Repository
     {
         Task<Presenca> Cadastrar(Presenca presenca);
         Task<Presenca> GetById(int id);
+        Task<Presenca> GetByAlunoRelatorioId(int alunoId, int relatorioId);
     }
 }

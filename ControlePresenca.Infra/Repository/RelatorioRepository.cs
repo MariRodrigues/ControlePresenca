@@ -30,5 +30,19 @@ namespace ControlePresenca.Infra.Repository
         {
             return await _context.Relatorios.FirstOrDefaultAsync(r => r.Id == id);
         }
+
+        public async Task<bool> Editar(Relatorio relatorio)
+        {
+            try
+            {
+                _context.Relatorios.Update(relatorio);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
     }
 }

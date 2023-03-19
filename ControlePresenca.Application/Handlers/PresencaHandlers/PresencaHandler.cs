@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using ControlePresenca.Application.Commands.Presenca;
+using ControlePresenca.Application.Commands.Presencas;
 using ControlePresenca.Application.Response;
 using ControlePresenca.Domain.Repository;
 using System;

@@ -3,7 +3,7 @@ using MediatR;
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace ControlePresenca.Application.Commands.Relatorio
+namespace ControlePresenca.Application.Commands.Relatorios
 {
     public class CreateRelatorioCommand : IRequest<ResponseApi>
     {

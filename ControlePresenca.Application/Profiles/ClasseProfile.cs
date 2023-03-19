@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using ControlePresenca.Application.Commands.Classe;
+using ControlePresenca.Application.Commands.Classes;
 using ControlePresenca.Domain.Entities;
 using System;
 using System.Collections.Generic;

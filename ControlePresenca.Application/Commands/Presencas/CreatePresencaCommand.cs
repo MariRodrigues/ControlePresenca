@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ControlePresenca.Application.Commands.Presenca
+namespace ControlePresenca.Application.Commands.Presencas
 {
     public class CreatePresencaCommand : IRequest<ResponseApi>
     {

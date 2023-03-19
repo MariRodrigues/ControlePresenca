@@ -1,6 +1,10 @@
-﻿namespace ControlePresenca.Controllers
+﻿using Microsoft.AspNetCore.Mvc;
+
+namespace ControlePresenca.Controllers
 {
-    public class VisitanteController
+    [ApiController]
+    [Route("[controller]")]
+    public class VisitanteController : ControllerBase
     {
 
     }

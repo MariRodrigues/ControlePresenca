@@ -18,6 +18,8 @@ namespace ControlePresenca.Configurations
         {
             services.AddScoped<IClasseRepository, ClasseRepository>();
             services.AddScoped<IClasseQueries, ClasseQueries>();
+            services.AddScoped<IAlunoQueries, AlunoQueries>();
+            services.AddScoped<IRelatorioQueries, RelatorioQueries>();
             services.AddScoped<IAlunoRepository, AlunoRepository>();
             services.AddScoped<IProfessorRepository, ProfessorRepository>();
             services.AddScoped<IRelatorioRepository, RelatorioRepository>();
@@ -31,6 +33,7 @@ namespace ControlePresenca.Configurations
 
             services.AddSwaggerGen(c =>
             {
+                c.EnableAnnotations();
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ControlePresenca", Version = "v1" });
             });
 

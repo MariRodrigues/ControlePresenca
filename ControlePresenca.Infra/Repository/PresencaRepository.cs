@@ -30,5 +30,10 @@ namespace ControlePresenca.Infra.Repository
         {
             return await _context.Presencas.FirstOrDefaultAsync(p => p.Id== id);
         }
+
+        public async Task<Presenca> GetByAlunoRelatorioId(int alunoId, int relatorioId)
+        {
+            return await _context.Presencas.FirstOrDefaultAsync(p => p.AlunoId == alunoId && p.RelatorioId == relatorioId);
+        }
     }
 }

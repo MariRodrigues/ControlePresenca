@@ -1,4 +1,4 @@
-﻿using ControlePresenca.Domain.ViewModels.Classes;
+﻿using ControlePresenca.Domain.ViewModels.Alunos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace ControlePresenca.Domain.Query
 {
-    public interface IClasseQueries
+    public interface IAlunoQueries
     {
-        Task<IEnumerable<ClasseViewModel>> GetAll();
+        Task<IEnumerable<AlunoViewModel>> GetAll(int? alunoId);
     }
 }
