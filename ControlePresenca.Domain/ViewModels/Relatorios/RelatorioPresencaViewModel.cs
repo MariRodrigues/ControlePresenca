@@ -19,7 +19,6 @@ namespace ControlePresenca.Domain.ViewModels.Relatorios
         public int ClasseId { get; set; }
         public List<PresencaViewModel> Presencas { get; set; }
     }
-
     public class PresencaViewModel
     {
         public int AlunoId { get; set; }

@@ -29,7 +29,9 @@ namespace ControlePresenca.Infra.Query
                             c.id as ClasseId, 
                             c.nome,
                             p.nome as Professores_Nome,
+                            p.Id as Professores_ProfessorId,
                             a.nome as Alunos_Nome,
+                            a.Id as Alunos_AlunoId,
                             (SELECT COUNT(*) FROM alunos WHERE classeId = c.id) as QuantidadeAlunos,
                             (SELECT COUNT(*) FROM relatorios WHERE classeId = c.id) as QuantidadeRelatorios
                             FROM classes c
@@ -39,8 +41,8 @@ namespace ControlePresenca.Infra.Query
             var result = await _connection.QueryAsync(query, queryArgs);
 
             Slapper.AutoMapper.Configuration.AddIdentifier(typeof(ClasseViewModel), "ClasseId");
-            Slapper.AutoMapper.Configuration.AddIdentifier(typeof(ProfessorViewModel), "Nome");
-            Slapper.AutoMapper.Configuration.AddIdentifier(typeof(AlunoRelatorioViewModel), "Nome");
+            Slapper.AutoMapper.Configuration.AddIdentifier(typeof(ProfessorViewModel), "ProfessorId");
+            Slapper.AutoMapper.Configuration.AddIdentifier(typeof(AlunoPresencaViewModel), "AlunoId");
 
             return Slapper.AutoMapper.MapDynamic<ClasseViewModel>(result);
         }
