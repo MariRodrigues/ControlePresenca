@@ -14,7 +14,7 @@ namespace ControlePresenca.Application.Profiles
         public RelatorioProfile()
         {
             CreateMap<CreateRelatorioCommand, Relatorio>();
-            CreateMap<EditRelatorioCommand, Relatorio>();
+            CreateMap<UpdateRelatorioCommand, Relatorio>();
         }
     }
 }

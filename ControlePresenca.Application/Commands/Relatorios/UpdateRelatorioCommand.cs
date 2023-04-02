@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace ControlePresenca.Application.Commands.Relatorios
 {
-    public class EditRelatorioCommand : IRequest<ResponseApi>
+    public class UpdateRelatorioCommand : IRequest<ResponseApi>
     {
         public int Id { get; set; }
         public DateTime Data { get; set; }

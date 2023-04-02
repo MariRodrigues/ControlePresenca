@@ -59,7 +59,7 @@ namespace ControlePresenca.Application.Handlers.RelatorioHandlers
             return new ResponseApi(true, "Relatório cadastrado com sucesso") { Id = newRelatorio.Id };
         }
 
-        public async Task<ResponseApi> Handle(EditRelatorioCommand request, CancellationToken cancellationToken)
+        public async Task<ResponseApi> Handle(UpdateRelatorioCommand request, CancellationToken cancellationToken)
         {
             var relatorio = await _relatorioRepository.GetById(request.Id);
 

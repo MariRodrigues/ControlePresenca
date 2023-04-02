@@ -11,7 +11,7 @@ namespace ControlePresenca.Application.Handlers.RelatorioHandlers
 {
     public interface IRelatorioHandler : 
         IRequestHandler<CreateRelatorioCommand, ResponseApi>,
-        IRequestHandler<EditRelatorioCommand, ResponseApi>
+        IRequestHandler<UpdateRelatorioCommand, ResponseApi>
     {
     }
 }

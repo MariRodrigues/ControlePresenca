@@ -37,7 +37,7 @@ namespace ControlePresenca.Controllers
         [SwaggerOperation(Summary = "Edita relatório",
                           OperationId = "Put")]
         [ProducesResponseType(200)]
-        public async Task<IActionResult> Editar([FromServices] IMediator mediator, EditRelatorioCommand command)
+        public async Task<IActionResult> Editar([FromServices] IMediator mediator, UpdateRelatorioCommand command)
         {
             var response = await mediator.Send(command);
             return Ok(response);

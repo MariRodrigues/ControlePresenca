@@ -4,6 +4,7 @@ using ControlePresenca.Infra.Data;
 using ControlePresenca.Infra.Query;
 using ControlePresenca.Infra.Repository;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,6 +31,9 @@ namespace ControlePresenca.Configurations
 
             services.AddDbContext<AppDbContext>(opts => opts.UseLazyLoadingProxies()
             .UseMySQL(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddDbContext<UserDbContext>(opts => opts.UseMySQL(Configuration.GetConnectionString("UsuarioConnection")));
+            services.AddIdentity<IdentityUser<int>, IdentityRole<int>>().AddEntityFrameworkStores<UserDbContext>();
 
             services.AddSwaggerGen(c =>
             {
