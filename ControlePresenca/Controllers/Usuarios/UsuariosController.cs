@@ -1,4 +1,5 @@
 ﻿using ControlePresenca.Application.Commands.Usuarios;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch.Operations;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +12,13 @@ namespace ControlePresenca.Controllers.Usuarios
     [Route("[controller]")]
     public class UsuariosController : ControllerBase
     {
+        private readonly IMediator _mediator;
+
+        public UsuariosController(IMediator mediator)
+        {
+            _mediator = mediator;
+        }
+
         [HttpPost]
         [SwaggerOperation(Summary = "Cadastra usuário",
                           OperationId = "Post")]
@@ -19,10 +27,7 @@ namespace ControlePresenca.Controllers.Usuarios
         [AllowAnonymous]
         public async Task<IActionResult> CadastrarUsuario([FromBody] CreateUsuarioCommand userDto)
         {
-            // Converto DTO para Command
-            // Chamar o Handler
-
-            return Ok();
+            return Ok(await _mediator.Send(userDto));
         }
     }
 }

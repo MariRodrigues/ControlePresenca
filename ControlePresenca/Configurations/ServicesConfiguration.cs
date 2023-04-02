@@ -1,5 +1,8 @@
-﻿using ControlePresenca.Domain.Query;
+﻿using ControlePresenca.Application.Services;
+using ControlePresenca.Domain.Entities;
+using ControlePresenca.Domain.Query;
 using ControlePresenca.Domain.Repository;
+using ControlePresenca.Domain.Services;
 using ControlePresenca.Infra.Data;
 using ControlePresenca.Infra.Query;
 using ControlePresenca.Infra.Repository;
@@ -25,6 +28,10 @@ namespace ControlePresenca.Configurations
             services.AddScoped<IProfessorRepository, ProfessorRepository>();
             services.AddScoped<IRelatorioRepository, RelatorioRepository>();
             services.AddScoped<IPresencaRepository, PresencaRepository>();
+            services.AddScoped<ICustomUsuarioRepository, CustomUsuarioRepository>();
+            services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<ILoginRepository, LoginRepository>();
+            services.AddScoped<LoginService, LoginService>();
 
             var assembly = AppDomain.CurrentDomain.Load("ControlePresenca.Application");
             services.AddMediatR(assembly);
@@ -33,7 +40,7 @@ namespace ControlePresenca.Configurations
             .UseMySQL(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddDbContext<UserDbContext>(opts => opts.UseMySQL(Configuration.GetConnectionString("UsuarioConnection")));
-            services.AddIdentity<IdentityUser<int>, IdentityRole<int>>().AddEntityFrameworkStores<UserDbContext>();
+            services.AddIdentity<CustomUsuario, IdentityRole<int>>().AddEntityFrameworkStores<UserDbContext>();
 
             services.AddSwaggerGen(c =>
             {
