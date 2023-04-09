@@ -1,6 +1,9 @@
 ﻿using ControlePresenca.Application.Requests;
 using ControlePresenca.Application.Response;
+using ControlePresenca.Domain.Entities;
 using ControlePresenca.Domain.Repository;
+using ControlePresenca.Domain.Services;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,11 +16,15 @@ namespace ControlePresenca.Application.Services
     {
         private readonly ICustomUsuarioRepository _usuarioManager;
         private readonly ILoginRepository _loginRepository;
+        private readonly ITokenService _tokenService;
+        private readonly SignInManager<CustomUsuario> _signInManager;
 
-        public LoginService(ICustomUsuarioRepository usuarioManager, ILoginRepository loginRepository)
+        public LoginService(ICustomUsuarioRepository usuarioManager, ILoginRepository loginRepository, SignInManager<CustomUsuario> signInManager, ITokenService tokenService)
         {
             _usuarioManager = usuarioManager;
             _loginRepository = loginRepository;
+            _signInManager = signInManager;
+            _tokenService = tokenService;
         }
 
         public async Task<ResponseApi> LoginUsuario (LoginRequest request)
@@ -29,7 +36,13 @@ namespace ControlePresenca.Application.Services
             if (!result.Succeeded)
                 return new ResponseApi(false, "Não foi possível fazer login");
 
-            return new ResponseApi(true, "Login realizado com sucesso");
+            Token token = _tokenService.CreateToken(usuarioIdentity, 
+                _signInManager.UserManager.GetRolesAsync(usuarioIdentity).Result.FirstOrDefault());
+
+            return new ResponseApi(true, "Login realizado com sucesso")
+            {
+                Infos = new { token }
+            };
         }
     }
 }

@@ -9,6 +9,7 @@ namespace ControlePresenca.Application.Response
     public class ResponseApi
     {
         public int Id { get; set; }
+        public object Infos { get; set; }
         public string Message { get; set; }
         public bool Success { get; set; }
 
