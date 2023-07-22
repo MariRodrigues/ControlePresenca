@@ -5,13 +5,13 @@ VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ControlePresenca", "ControlePresenca\ControlePresenca.csproj", "{39D540DA-C6A7-4F46-ACA2-A0AA771DB791}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControlePresenca.Domain", "ControlePresenca.Domain\ControlePresenca.Domain.csproj", "{D1B3ECC3-4F37-4F72-85EB-FBCC050823AB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ControlePresenca.Domain", "ControlePresenca.Domain\ControlePresenca.Domain.csproj", "{D1B3ECC3-4F37-4F72-85EB-FBCC050823AB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControlePresenca.Infra", "ControlePresenca.Infra\ControlePresenca.Infra.csproj", "{24D3124B-3F52-488D-B24F-1AAAD3B57CC1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ControlePresenca.Infra", "ControlePresenca.Infra\ControlePresenca.Infra.csproj", "{24D3124B-3F52-488D-B24F-1AAAD3B57CC1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControlePresenca.Application", "ControlePresenca.Application\ControlePresenca.Application.csproj", "{D5DF28B0-9050-4710-977A-CB45CD95736F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ControlePresenca.Application", "ControlePresenca.Application\ControlePresenca.Application.csproj", "{D5DF28B0-9050-4710-977A-CB45CD95736F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControlePresenca.Test", "ControlePresenca.Test\ControlePresenca.Test.csproj", "{83D21AEE-53E3-44FC-A5F1-AD96D2BF7949}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContrrolePresenca.Test", "ContrrolePresenca.Test\ContrrolePresenca.Test.csproj", "{4A43A400-13AB-4643-B81B-B405B06CFC52}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,10 +35,10 @@ Global
 		{D5DF28B0-9050-4710-977A-CB45CD95736F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D5DF28B0-9050-4710-977A-CB45CD95736F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D5DF28B0-9050-4710-977A-CB45CD95736F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{83D21AEE-53E3-44FC-A5F1-AD96D2BF7949}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{83D21AEE-53E3-44FC-A5F1-AD96D2BF7949}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{83D21AEE-53E3-44FC-A5F1-AD96D2BF7949}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{83D21AEE-53E3-44FC-A5F1-AD96D2BF7949}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A43A400-13AB-4643-B81B-B405B06CFC52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A43A400-13AB-4643-B81B-B405B06CFC52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A43A400-13AB-4643-B81B-B405B06CFC52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A43A400-13AB-4643-B81B-B405B06CFC52}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

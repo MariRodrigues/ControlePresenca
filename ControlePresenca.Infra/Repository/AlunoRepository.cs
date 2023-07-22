@@ -25,6 +25,12 @@ namespace ControlePresenca.Infra.Repository
             return aluno;
         }
 
+        public void Deletar(Aluno aluno)
+        {
+            _context.Alunos.Remove(aluno);
+            _context.SaveChanges();
+        }
+
         public Aluno GetById(int id)
         {
             return _context.Alunos.FirstOrDefault(a => a.Id == id);

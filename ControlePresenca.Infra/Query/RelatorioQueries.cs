@@ -73,8 +73,8 @@ namespace ControlePresenca.Infra.Query
                             
                             FROM Relatorios r 
 
-                            INNER JOIN Presencas p on p.relatorioId = r.id
-                            INNER JOIN Alunos a on a.id = p.AlunoId
+                            LEFT JOIN Presencas p on p.relatorioId = r.id
+                            LEFT JOIN Alunos a on a.id = p.AlunoId
     
                             WHERE r.id = @RelatorioId ; ";
 
