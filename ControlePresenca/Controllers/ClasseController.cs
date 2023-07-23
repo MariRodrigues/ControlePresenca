@@ -44,9 +44,9 @@ namespace ControlePresenca.Controllers
         [SwaggerOperation(Summary = "Buscar alunos por Classe",
                           OperationId = "Get")]
         [ProducesResponseType(200)]
-        public async Task<IActionResult> BuscarAlunosPorClasse(int classeId)
+        public async Task<IActionResult> BuscarAlunosPorClasse(int classeId, [FromQuery] int pagina, [FromQuery] int quantidadeItens)
         {
-            var response = await _classeQueries.GetByClass(classeId);
+            var response = await _classeQueries.GetByClass(classeId, pagina, quantidadeItens);
 
             if (!response.Any())
                 return NotFound("Classe não encontrada");

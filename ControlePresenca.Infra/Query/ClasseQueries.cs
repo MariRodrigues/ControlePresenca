@@ -47,7 +47,7 @@ namespace ControlePresenca.Infra.Query
             return Slapper.AutoMapper.MapDynamic<ClasseViewModel>(result);
         }
 
-        public async Task<IEnumerable<ClasseViewModel>> GetByClass(int classeId)
+        public async Task<IEnumerable<ClasseViewModel>> GetByClass(int classeId, int pagina, int quantidadeItens)
         {
             var queryArgs = new DynamicParameters();
 
@@ -64,9 +64,19 @@ namespace ControlePresenca.Infra.Query
                             LEFT JOIN professores p ON p.classeId = c.Id
                             LEFT JOIN alunos a ON a.classeId = c.Id
 
-                            WHERE c.Id = @ClasseId";
+                            WHERE c.Id = @ClasseId
 
-            var result = await _connection.QueryAsync(query, new { ClasseId = classeId});
+                            LIMIT @quantidadeItens OFFSET @Offset
+
+                            ";
+
+            var offset = (pagina - 1) * quantidadeItens;
+
+            queryArgs.Add("Offset", offset);
+            queryArgs.Add("quantidadeItens", quantidadeItens);
+            queryArgs.Add("ClasseId", classeId);
+
+            var result = await _connection.QueryAsync(query, queryArgs);
 
             Slapper.AutoMapper.Configuration.AddIdentifier(typeof(ClasseViewModel), "ClasseId");
             Slapper.AutoMapper.Configuration.AddIdentifier(typeof(ProfessorViewModel), "ProfessorId");

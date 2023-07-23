@@ -9,7 +9,7 @@ namespace ControlePresenca.Domain.Query
 {
     public interface IRelatorioQueries
     {
-        Task<IEnumerable<RelatorioViewModel>> GetAllFilter(int? classeId, DateTime? data);
+        Task<IEnumerable<RelatorioViewModel>> GetAllFilter(int? classeId, DateTime? data, int pagina, int quantidadeItens);
         Task<RelatorioPresencaViewModel> GetRelatorioById(int relatorioId);
     }
 }

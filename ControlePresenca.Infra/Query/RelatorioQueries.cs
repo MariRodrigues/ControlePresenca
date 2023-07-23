@@ -20,7 +20,7 @@ namespace ControlePresenca.Infra.Query
             _connection = new MySqlConnection(context.Database.GetConnectionString());
         }
 
-        public async Task<IEnumerable<RelatorioViewModel>> GetAllFilter(int? classeId, DateTime? data)
+        public async Task<IEnumerable<RelatorioViewModel>> GetAllFilter(int? classeId, DateTime? data, int pagina, int quantidadeItens)
         {
             var queryArgs = new DynamicParameters();
 
@@ -49,6 +49,15 @@ namespace ControlePresenca.Infra.Query
                 query = query.Remove(query.LastIndexOf("WHERE"));
             else
                 query = query.Remove(query.LastIndexOf("AND"));
+
+            if (quantidadeItens != 0 && pagina != 0)
+            {
+                query += " LIMIT @quantidadeItens OFFSET @Offset ";
+
+                var offset = (pagina - 1) * quantidadeItens;
+                queryArgs.Add("Offset", offset);
+                queryArgs.Add("quantidadeItens", quantidadeItens);
+            }
 
             var result = await _connection.QueryAsync<RelatorioViewModel>(query, queryArgs);
 
