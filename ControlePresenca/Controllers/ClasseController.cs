@@ -31,6 +31,16 @@ namespace ControlePresenca.Controllers
         }
 
         [HttpGet]
+        [SwaggerOperation(Summary = "Busca todas as classes",
+                          OperationId = "Get")]
+        [ProducesResponseType(200)]
+        public async Task<IActionResult> BuscarTodasClasses()
+        {
+            var response = await _classeQueries.GetAllClasses();
+            return Ok(response);
+        }
+
+        [HttpGet("/alunos")]
         [SwaggerOperation(Summary = "Busca todos os alunos",
                           OperationId = "Get")]
         [ProducesResponseType(200)]

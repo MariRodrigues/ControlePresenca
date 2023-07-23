@@ -21,7 +21,7 @@ namespace ControlePresenca.Infra.Query
             _connection = new MySqlConnection(context.Database.GetConnectionString());
         }
 
-        public async Task<IEnumerable<ClasseViewModel>> GetAll()
+        public async Task<IEnumerable<ClasseAlunosViewModel>> GetAll()
         {
             var queryArgs = new DynamicParameters();
 
@@ -40,14 +40,21 @@ namespace ControlePresenca.Infra.Query
 
             var result = await _connection.QueryAsync(query, queryArgs);
 
-            Slapper.AutoMapper.Configuration.AddIdentifier(typeof(ClasseViewModel), "ClasseId");
+            Slapper.AutoMapper.Configuration.AddIdentifier(typeof(ClasseAlunosViewModel), "ClasseId");
             Slapper.AutoMapper.Configuration.AddIdentifier(typeof(ProfessorViewModel), "ProfessorId");
             Slapper.AutoMapper.Configuration.AddIdentifier(typeof(AlunoPresencaViewModel), "AlunoId");
 
-            return Slapper.AutoMapper.MapDynamic<ClasseViewModel>(result);
+            return Slapper.AutoMapper.MapDynamic<ClasseAlunosViewModel>(result);
         }
 
-        public async Task<IEnumerable<ClasseViewModel>> GetByClass(int classeId, int pagina, int quantidadeItens)
+        public async Task<IEnumerable<ClasseViewModel>> GetAllClasses()
+        {
+            var query = @"SELECT Id, nome FROM Classes ";
+
+            return await _connection.QueryAsync<ClasseViewModel>(query);
+        }
+
+        public async Task<IEnumerable<ClasseAlunosViewModel>> GetByClass(int classeId, int pagina, int quantidadeItens)
         {
             var queryArgs = new DynamicParameters();
 
@@ -78,11 +85,11 @@ namespace ControlePresenca.Infra.Query
 
             var result = await _connection.QueryAsync(query, queryArgs);
 
-            Slapper.AutoMapper.Configuration.AddIdentifier(typeof(ClasseViewModel), "ClasseId");
+            Slapper.AutoMapper.Configuration.AddIdentifier(typeof(ClasseAlunosViewModel), "ClasseId");
             Slapper.AutoMapper.Configuration.AddIdentifier(typeof(ProfessorViewModel), "ProfessorId");
             Slapper.AutoMapper.Configuration.AddIdentifier(typeof(AlunoPresencaViewModel), "AlunoId");
 
-            return Slapper.AutoMapper.MapDynamic<ClasseViewModel>(result);
+            return Slapper.AutoMapper.MapDynamic<ClasseAlunosViewModel>(result);
         }
     }
 }

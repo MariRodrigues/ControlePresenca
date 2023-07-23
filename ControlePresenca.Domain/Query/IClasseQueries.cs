@@ -9,7 +9,8 @@ namespace ControlePresenca.Domain.Query
 {
     public interface IClasseQueries
     {
-        Task<IEnumerable<ClasseViewModel>> GetAll();
-        Task<IEnumerable<ClasseViewModel>> GetByClass(int classeId, int pagina, int quantidadeItens);
+        Task<IEnumerable<ClasseAlunosViewModel>> GetAll();
+        Task<IEnumerable<ClasseAlunosViewModel>> GetByClass(int classeId, int pagina, int quantidadeItens);
+        Task<IEnumerable<ClasseViewModel>> GetAllClasses();
     }
 }
