@@ -3,6 +3,7 @@ using ControlePresenca.Application.Commands.Relatorios;
 using ControlePresenca.Application.Response;
 using ControlePresenca.Domain.Entities;
 using ControlePresenca.Domain.Repository;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -35,21 +36,22 @@ namespace ControlePresenca.Application.Handlers.RelatorioHandlers
                 return new ResponseApi(false, "A classe informada não existe");
 
             var relatorio = _mapper.Map<Relatorio>(request);
+            relatorio.Data = DateTime.Now;
 
             var newRelatorio = await _relatorioRepository.Cadastrar(relatorio);
 
             if (newRelatorio is null)
                 return new ResponseApi(false, "Erro ao cadastrar relatório");
 
-            if (classe.Alunos.Any())
+            if (request.Presencas.Any())
             {
-                foreach (var aluno in classe.Alunos)
+                foreach (var aluno in request.Presencas)
                 {
-                    Presenca presenca = new Presenca()
+                    Presenca presenca = new()
                     {
-                        AlunoId = aluno.Id,
                         RelatorioId = newRelatorio.Id,
-                        Presente = false
+                        AlunoId = aluno.AlunoId,
+                        Presente = aluno.Presente
                     };
 
                     await _presencaRepository.Cadastrar(presenca);
@@ -81,7 +83,8 @@ namespace ControlePresenca.Application.Handlers.RelatorioHandlers
                 return new ResponseApi(false, "Não foi possível atualizar o relatório.");
         }
 
-        private async Task<List<Presenca>> ValidPresenca(int relatrorioId, List<PresencaDTO> presencaList)
+
+        private async Task<List<Presenca>> ValidPresenca(int relatrorioId, List<UpdatePresencaDTO> presencaList)
         {
             List<Presenca> presencas = new();
 

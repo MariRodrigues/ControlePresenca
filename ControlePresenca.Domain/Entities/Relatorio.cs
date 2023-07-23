@@ -17,11 +17,10 @@ namespace ControlePresenca.Domain.Entities
         public double Oferta { get; set; }
         public int QuantidadeBiblias { get; set; }
         public int QuantidadeRevistas { get; set; }
+        public int QuantidadeVisitantes { get; set; }                  
         public int ClasseId { get; set; }
         [JsonIgnore]
         public virtual List<Presenca> Presencas { get; set; }
-        [JsonIgnore]
-        public virtual List<Visitante> Visitantes { get; set; }
 
         public void Update(DateTime data, string observacao, double oferta, int quantidadeBiblias, List<Presenca> presencas)
         {

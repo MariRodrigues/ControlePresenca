@@ -25,9 +25,11 @@ namespace ControlePresenca.Infra.Query
             var queryArgs = new DynamicParameters();
 
             var query = @"SELECT
-                            id as relatorioId, 
-                            data 
-                            FROM relatorios 
+                            r.id as relatorioId, 
+                            r.data,
+                            c.Nome as NomeClasse
+                            FROM relatorios r
+                            INNER JOIN Classes c ON c.ID = r.ClasseId
                             WHERE ";
 
             if (data != null)

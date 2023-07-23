@@ -10,5 +10,6 @@ namespace ControlePresenca.Domain.Query
     public interface IClasseQueries
     {
         Task<IEnumerable<ClasseViewModel>> GetAll();
+        Task<IEnumerable<ClasseViewModel>> GetByClass(int classeId);
     }
 }

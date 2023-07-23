@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.AspNetCore.JsonPatch.Operations;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ControlePresenca.Controllers
@@ -23,7 +24,7 @@ namespace ControlePresenca.Controllers
         [SwaggerOperation(Summary = "Cadastra nova classe",
                           OperationId = "Post")]
         [ProducesResponseType(200)]
-        public async Task<IActionResult> Cadastrar([FromServices] IMediator mediator, CreateClasseCommand command)
+        public async Task<IActionResult> CadastrarAlunos([FromServices] IMediator mediator, CreateClasseCommand command)
         {
             var response = await mediator.Send(command);
             return Ok(response);
@@ -31,11 +32,25 @@ namespace ControlePresenca.Controllers
 
         [HttpGet]
         [SwaggerOperation(Summary = "Busca todos os alunos",
-                          OperationId = "Post")]
+                          OperationId = "Get")]
         [ProducesResponseType(200)]
-        public async Task<IActionResult> Buscar()
+        public async Task<IActionResult> BuscarAlunos()
         {
             var response = await _classeQueries.GetAll();
+            return Ok(response);
+        }
+
+        [HttpGet("{classeId}")]
+        [SwaggerOperation(Summary = "Buscar alunos por Classe",
+                          OperationId = "Get")]
+        [ProducesResponseType(200)]
+        public async Task<IActionResult> BuscarAlunosPorClasse(int classeId)
+        {
+            var response = await _classeQueries.GetByClass(classeId);
+
+            if (!response.Any())
+                return NotFound("Classe não encontrada");
+
             return Ok(response);
         }
     }

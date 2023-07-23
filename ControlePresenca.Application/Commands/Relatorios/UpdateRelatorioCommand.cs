@@ -18,25 +18,18 @@ namespace ControlePresenca.Application.Commands.Relatorios
         public string Observacao { get; set; }
         public double Oferta { get; set; }
         public int QuantidadeBiblias { get; set; }
-        public virtual List<PresencaDTO> Presencas { get; set; }
-        public virtual List<VisitanteDTO> Visitantes { get; set; }
+        public virtual List<UpdatePresencaDTO> Presencas { get; set; }
     }
 
-    public class PresencaDTO
+    public class UpdatePresencaDTO
     {
         public int AlunoId { get; set; }
         public bool Presente { get; set; }
-        public AlunoDTO Aluno { get; set; }
+        public UpdateAlunoDTO Aluno { get; set; }
     }
 
-    public class AlunoDTO
+    public class UpdateAlunoDTO
     {
         public string Nome { get; set; }
-    }
-
-    public class VisitanteDTO
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
     }
 }

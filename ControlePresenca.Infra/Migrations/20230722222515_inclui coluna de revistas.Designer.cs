@@ -3,14 +3,16 @@ using System;
 using ControlePresenca.Infra.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ControlePresenca.Infra.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230722222515_inclui coluna de revistas")]
+    partial class incluicolunaderevistas
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -117,14 +119,30 @@ namespace ControlePresenca.Infra.Migrations
                     b.Property<int>("QuantidadeRevistas")
                         .HasColumnType("int");
 
-                    b.Property<int>("QuantidadeVisitantes")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ClasseId");
 
                     b.ToTable("Relatorios");
+                });
+
+            modelBuilder.Entity("ControlePresenca.Domain.Entities.Visitante", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<int>("RelatorioId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RelatorioId");
+
+                    b.ToTable("Visitantes");
                 });
 
             modelBuilder.Entity("ControlePresenca.Domain.Entities.Aluno", b =>
@@ -179,6 +197,17 @@ namespace ControlePresenca.Infra.Migrations
                     b.Navigation("Classe");
                 });
 
+            modelBuilder.Entity("ControlePresenca.Domain.Entities.Visitante", b =>
+                {
+                    b.HasOne("ControlePresenca.Domain.Entities.Relatorio", "Relatorio")
+                        .WithMany("Visitantes")
+                        .HasForeignKey("RelatorioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Relatorio");
+                });
+
             modelBuilder.Entity("ControlePresenca.Domain.Entities.Aluno", b =>
                 {
                     b.Navigation("Presencas");
@@ -196,6 +225,8 @@ namespace ControlePresenca.Infra.Migrations
             modelBuilder.Entity("ControlePresenca.Domain.Entities.Relatorio", b =>
                 {
                     b.Navigation("Presencas");
+
+                    b.Navigation("Visitantes");
                 });
 #pragma warning restore 612, 618
         }

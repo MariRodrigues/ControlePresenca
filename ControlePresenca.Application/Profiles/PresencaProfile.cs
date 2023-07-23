@@ -10,7 +10,7 @@ namespace ControlePresenca.Application.Profiles
         public PresencaProfile()
         {
             CreateMap<CreatePresencaCommand, Presenca>();
-            CreateMap<PresencaDTO, Presenca>();
+            CreateMap<UpdatePresencaDTO, Presenca>();
 
         }
     }

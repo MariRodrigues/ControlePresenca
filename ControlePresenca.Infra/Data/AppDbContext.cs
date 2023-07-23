@@ -35,17 +35,11 @@ namespace ControlePresenca.Infra.Data
                 .HasOne(presenca => presenca.Aluno)
                 .WithMany(aluno => aluno.Presencas)
                 .HasForeignKey(presenca => presenca.AlunoId);
-
-            modelBuilder.Entity<Visitante>()
-                .HasOne(visitante => visitante.Relatorio)
-                .WithMany(relatorio => relatorio.Visitantes)
-                .HasForeignKey(visitante => visitante.RelatorioId);
         }
 
         public DbSet<Classe> Classes { get; set; }
         public DbSet<Aluno> Alunos { get; set; }
         public DbSet<Professor> Professores { get; set; }
-        public DbSet<Visitante> Visitantes { get; set; }
         public DbSet<Relatorio> Relatorios { get; set; }
         public DbSet<Presenca> Presencas { get; set; }
     }
