@@ -35,8 +35,10 @@ namespace ControlePresenca.Application.Handlers.RelatorioHandlers
             if (classe is null)
                 return new ResponseApi(false, "A classe informada não existe");
 
+            if (request.Data is null)
+                request.Data = DateTime.Now;
+
             var relatorio = _mapper.Map<Relatorio>(request);
-            relatorio.Data = DateTime.Now;
 
             var newRelatorio = await _relatorioRepository.Cadastrar(relatorio);
 
