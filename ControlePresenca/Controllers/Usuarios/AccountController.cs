@@ -10,11 +10,11 @@ namespace ControlePresenca.Controllers.Usuarios
 {
     [ApiController]
     [Route("[controller]")]
-    public class LoginController : ControllerBase
+    public class AccountController : ControllerBase
     {
         private readonly LoginService _loginService;
 
-        public LoginController(LoginService loginService)
+        public AccountController(LoginService loginService)
         {
             _loginService = loginService;
         }
@@ -32,6 +32,26 @@ namespace ControlePresenca.Controllers.Usuarios
                 return Unauthorized(result.Message);
 
             return Ok(result);
+        }
+
+        [HttpPost("connect/authorize")]
+        [SwaggerOperation(Summary = "Se autentica com o Google",
+                          OperationId = "Post")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
+        public async Task<IActionResult> Authorize(LoginRequest request)
+        {
+            return Ok();
+        }
+
+        [HttpPost("signin-google-callback")]
+        [SwaggerOperation(Summary = "Troca o code pelo token",
+                          OperationId = "Post")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
+        public async Task<IActionResult> SigninGoogle(LoginRequest request)
+        {
+            return Ok();
         }
     }
 }

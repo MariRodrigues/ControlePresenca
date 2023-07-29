@@ -38,7 +38,6 @@ namespace ControlePresenca.Infra.Data
                 Name = "user",
                 NormalizedName = "USER"
             });
-
         }
 
     }
