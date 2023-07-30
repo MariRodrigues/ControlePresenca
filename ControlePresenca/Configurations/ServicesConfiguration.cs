@@ -74,72 +74,11 @@ namespace ControlePresenca.Configurations
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ControlePresenca", Version = "v1" });
             });
 
-            services.AddAuthentication(auth =>
-            {
-                auth.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                auth.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).
-            AddJwtBearer(token =>
-            {
-                token.RequireHttpsMetadata = false;
-                token.SaveToken = true;
-                token.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(
-                        Encoding.UTF8.GetBytes("0asdjas09djsa09djasdjsadajsd09asjd09sajcnzxn")),
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                    ClockSkew = TimeSpan.Zero
-                };
-            }).AddGoogle(options =>
-            {
-                options.ClientId = "686934782381-05r2o0rcdkagb151fq39r7u90a96l5ha.apps.googleusercontent.com";
-                options.ClientSecret = "sGOCSPX-o9lWgDXmssjPl-4oGCcvuAIGpKxs";
-
-                options.ClaimActions.MapJsonKey("role", "user");
-            });
-
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-            services.AddOpenIddict()
-                .AddCore(options =>
-                {
-                    options.UseEntityFrameworkCore()
-                           .UseDbContext<UserDbContext>();
-                })
-                .AddServer(options =>
-                {
-                    options.SetAuthorizationEndpointUris("/connect/authorize")
-                           .SetTokenEndpointUris("/connect/token")
-                           .AllowAuthorizationCodeFlow()
-                           .AllowRefreshTokenFlow()
-                           .RequireProofKeyForCodeExchange();
-
-                    options.RegisterScopes(OpenIddictConstants.Scopes.Profile);
-                })
-                .AddValidation(options =>
-                {
-                    options.UseAspNetCore();
-                })
-                .AddValidation(options =>
-                {
-                    options.SetIssuer("https://accounts.google.com");
-
-                    options.AddAudiences("686934782381-05r2o0rcdkagb151fq39r7u90a96l5ha.apps.googleusercontent.com");
-                    options.UseSystemNetHttp();
-                });
-
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("Admin", policy =>
-                {
-                    policy.RequireRole("admin");
-                });
-            });
-
-            services.AddControllers().AddNewtonsoftJson(options =>
-            options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+            services.AddControllers()
+                .AddNewtonsoftJson(options =>
+                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
             return services;
         }
