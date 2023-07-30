@@ -22,7 +22,7 @@ namespace ControlePresenca.Controllers
         }
 
         [HttpPost]
-        [Authorize(Policy = "Admin")]
+        //[Authorize(Policy = "Admin")]
         [SwaggerOperation(Summary = "Cadastra aluno",
                           OperationId = "Post")]
         [ProducesResponseType(200)]
