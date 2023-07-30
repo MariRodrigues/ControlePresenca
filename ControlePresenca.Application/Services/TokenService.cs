@@ -18,7 +18,8 @@ namespace ControlePresenca.Application.Services
             Claim[] direitosUsuario = new Claim[]
             {
                 new Claim("username", usuario.UserName),
-                new Claim("id", usuario.Id.ToString()),
+                new Claim("email", usuario.Email),
+                new Claim("name", usuario.Name.ToString()),
                 new Claim(ClaimTypes.Role, role)
             };
 

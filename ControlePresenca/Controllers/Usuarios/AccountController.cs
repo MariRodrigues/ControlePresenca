@@ -1,5 +1,6 @@
 ﻿using ControlePresenca.Application.Requests;
 using ControlePresenca.Application.Services;
+using ControlePresenca.Domain.Entities;
 using ControlePresenca.Domain.Services;
 using Microsoft.AspNetCore.JsonPatch.Operations;
 using Microsoft.AspNetCore.Mvc;
@@ -15,11 +16,13 @@ namespace ControlePresenca.Controllers.Usuarios
     {
         private readonly LoginService _loginService;
         private readonly IGoogleService _googleService;
+        private readonly ITokenService _tokenService;
 
-        public AccountController(LoginService loginService, IGoogleService googleService)
+        public AccountController(LoginService loginService, IGoogleService googleService, ITokenService tokenService)
         {
             _loginService = loginService;
             _googleService = googleService;
+            _tokenService = tokenService;
         }
 
         [HttpPost]
@@ -54,9 +57,14 @@ namespace ControlePresenca.Controllers.Usuarios
         [ProducesResponseType(401)]
         public async Task<IActionResult> SigninGoogle(string code)
         {
-            var response = await _googleService.GetToken(code);
+            var user = await _googleService.GetToken(code);
 
-            return Ok("Seu token: " + response);
+            if (user is null)
+                return BadRequest("Erro ao gerar token Google");
+
+            var token = _tokenService.CreateToken(user, "user");
+
+            return Ok(token);
         }
 
     }
