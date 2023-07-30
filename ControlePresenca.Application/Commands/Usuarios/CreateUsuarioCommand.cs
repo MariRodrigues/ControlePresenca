@@ -8,6 +8,8 @@ namespace ControlePresenca.Application.Commands.Usuarios
     public class CreateUsuarioCommand : IRequest<ResponseApi>
     {
         [Required]
+        public string Name { get; set; }
+        [Required]
         public string UserName { get; set; }
         [Required]
         [DataType(DataType.EmailAddress, ErrorMessage = "E-mail em formato inválido.")]
