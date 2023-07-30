@@ -1,5 +1,6 @@
 ﻿using ControlePresenca.Application.Requests;
 using ControlePresenca.Application.Services;
+using ControlePresenca.Domain.Services;
 using Microsoft.AspNetCore.JsonPatch.Operations;
 using Microsoft.AspNetCore.Mvc;
 using MySqlX.XDevAPI.Common;
@@ -13,10 +14,12 @@ namespace ControlePresenca.Controllers.Usuarios
     public class AccountController : ControllerBase
     {
         private readonly LoginService _loginService;
+        private readonly IGoogleService _googleService;
 
-        public AccountController(LoginService loginService)
+        public AccountController(LoginService loginService, IGoogleService googleService)
         {
             _loginService = loginService;
+            _googleService = googleService;
         }
 
         [HttpPost]
@@ -34,7 +37,7 @@ namespace ControlePresenca.Controllers.Usuarios
             return Ok(result);
         }
 
-        [HttpPost("connect/authorize")]
+        [HttpPost("/connect/authorize")]
         [SwaggerOperation(Summary = "Se autentica com o Google",
                           OperationId = "Post")]
         [ProducesResponseType(200)]
@@ -44,14 +47,17 @@ namespace ControlePresenca.Controllers.Usuarios
             return Ok();
         }
 
-        [HttpPost("signin-google-callback")]
+        [HttpGet("/signin-google-callback")]
         [SwaggerOperation(Summary = "Troca o code pelo token",
-                          OperationId = "Post")]
+            OperationId = "Get")]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
-        public async Task<IActionResult> SigninGoogle(LoginRequest request)
+        public async Task<IActionResult> SigninGoogle(string code)
         {
-            return Ok();
+            var response = await _googleService.GetToken(code);
+
+            return Ok("Seu token: " + response);
         }
+
     }
 }

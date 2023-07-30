@@ -6,9 +6,12 @@ using ControlePresenca.Domain.Services;
 using ControlePresenca.Infra.Data;
 using ControlePresenca.Infra.Query;
 using ControlePresenca.Infra.Repository;
+using ControlePresenca.Infra.Services;
 using Google.Protobuf.WellKnownTypes;
 using MediatR;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -17,8 +20,14 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using OpenIddict.Abstractions;
+using OpenIddict.Validation.AspNetCore;
 using System;
+using System.ComponentModel.DataAnnotations;
+using System.Runtime.ConstrainedExecution;
+using System.Security.Policy;
 using System.Text;
+using static OpenIddict.Validation.AspNetCore.OpenIddictValidationAspNetCoreConstants;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace ControlePresenca.Configurations
 {
@@ -38,6 +47,7 @@ namespace ControlePresenca.Configurations
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<ILoginRepository, LoginRepository>();
             services.AddScoped<LoginService, LoginService>();
+            services.AddScoped<IGoogleService, GoogleService>();
 
             var assembly = AppDomain.CurrentDomain.Load("ControlePresenca.Application");
             services.AddMediatR(assembly);
@@ -87,7 +97,9 @@ namespace ControlePresenca.Configurations
                 // Configuração do Google usando o pacote Microsoft.AspNetCore.Authentication.Google
                 options.ClientId = "686934782381-05r2o0rcdkagb151fq39r7u90a96l5ha.apps.googleusercontent.com";
                 options.ClientSecret = "sGOCSPX-o9lWgDXmssjPl-4oGCcvuAIGpKxs";
-            }); 
+
+                options.ClaimActions.MapJsonKey("role", "user");
+            });
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
@@ -111,8 +123,24 @@ namespace ControlePresenca.Configurations
                 .AddValidation(options =>
                 {
                     options.UseAspNetCore();
+                })
+                .AddValidation(options =>
+                {
+                    // Configure a issuer URI (URI do provedor de identidade) para o Google.
+                    options.SetIssuer("https://accounts.google.com");
+
+                    // Configure o Audience (público) e o Scheme (esquema) para o fluxo de autorização do Google.
+                    options.AddAudiences("686934782381-05r2o0rcdkagb151fq39r7u90a96l5ha.apps.googleusercontent.com");
+                    options.UseSystemNetHttp();
                 });
 
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Admin", policy =>
+                {
+                    policy.RequireRole("admin");
+                });
+            });
 
             services.AddControllers().AddNewtonsoftJson(options =>
             options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
