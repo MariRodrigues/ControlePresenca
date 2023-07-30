@@ -94,7 +94,6 @@ namespace ControlePresenca.Configurations
                 };
             }).AddGoogle(options =>
             {
-                // Configuração do Google usando o pacote Microsoft.AspNetCore.Authentication.Google
                 options.ClientId = "686934782381-05r2o0rcdkagb151fq39r7u90a96l5ha.apps.googleusercontent.com";
                 options.ClientSecret = "sGOCSPX-o9lWgDXmssjPl-4oGCcvuAIGpKxs";
 
@@ -103,7 +102,6 @@ namespace ControlePresenca.Configurations
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-            // Configure o OpenIddict para usar o Google como provedor de identidade
             services.AddOpenIddict()
                 .AddCore(options =>
                 {
@@ -126,10 +124,8 @@ namespace ControlePresenca.Configurations
                 })
                 .AddValidation(options =>
                 {
-                    // Configure a issuer URI (URI do provedor de identidade) para o Google.
                     options.SetIssuer("https://accounts.google.com");
 
-                    // Configure o Audience (público) e o Scheme (esquema) para o fluxo de autorização do Google.
                     options.AddAudiences("686934782381-05r2o0rcdkagb151fq39r7u90a96l5ha.apps.googleusercontent.com");
                     options.UseSystemNetHttp();
                 });
