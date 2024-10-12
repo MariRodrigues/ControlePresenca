@@ -2,8 +2,8 @@
 using ControlePresenca.Domain.ViewModels.Relatorios;
 using ControlePresenca.Infra.Data;
 using Dapper;
+using Microsoft.Data.SqlClient; // Usando SqlClient para SQL Server
 using Microsoft.EntityFrameworkCore;
-using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,11 +13,11 @@ namespace ControlePresenca.Infra.Query
 {
     public class RelatorioQueries : IRelatorioQueries
     {
-        private readonly MySqlConnection _connection;
+        private readonly SqlConnection _connection; // Troca para SqlConnection
 
         public RelatorioQueries(AppDbContext context)
         {
-            _connection = new MySqlConnection(context.Database.GetConnectionString());
+            _connection = new SqlConnection(context.Database.GetConnectionString());
         }
 
         public async Task<IEnumerable<RelatorioViewModel>> GetAllFilter(int? classeId, DateTime? data, int pagina, int quantidadeItens)
@@ -25,23 +25,23 @@ namespace ControlePresenca.Infra.Query
             var queryArgs = new DynamicParameters();
 
             var query = @"SELECT
-                            r.id as relatorioId, 
+                            r.id as RelatorioId, 
                             r.data,
                             c.Nome as NomeClasse
-                            FROM relatorios r
-                            INNER JOIN Classes c ON c.ID = r.ClasseId
-                            WHERE ";
+                          FROM Relatorios r
+                          INNER JOIN Classes c ON c.ID = r.ClasseId
+                          WHERE ";
 
             if (data != null)
             {
-                query += " MONTH(data) = @mes AND YEAR(data) = @ano AND ";
+                query += " MONTH(r.data) = @mes AND YEAR(r.data) = @ano AND ";
                 queryArgs.Add("@mes", data.Value.Month);
                 queryArgs.Add("@ano", data.Value.Year);
             }
 
             if (classeId != null)
             {
-                query += " classeId = @classeId AND ";
+                query += " r.ClasseId = @classeId AND ";
                 queryArgs.Add("classeId", classeId);
             }
 
@@ -50,13 +50,14 @@ namespace ControlePresenca.Infra.Query
             else
                 query = query.Remove(query.LastIndexOf("AND"));
 
+            // Paginação no SQL Server usando OFFSET e FETCH
             if (quantidadeItens != 0 && pagina != 0)
             {
-                query += " LIMIT @quantidadeItens OFFSET @Offset ";
+                query += " ORDER BY r.id OFFSET @Offset ROWS FETCH NEXT @QuantidadeItens ROWS ONLY";
 
                 var offset = (pagina - 1) * quantidadeItens;
                 queryArgs.Add("Offset", offset);
-                queryArgs.Add("quantidadeItens", quantidadeItens);
+                queryArgs.Add("QuantidadeItens", quantidadeItens);
             }
 
             var result = await _connection.QueryAsync<RelatorioViewModel>(query, queryArgs);
@@ -64,7 +65,7 @@ namespace ControlePresenca.Infra.Query
             return result;
         }
 
-        public async Task<RelatorioPresencaViewModel> GetRelatorioById (int relatorioId)
+        public async Task<RelatorioPresencaViewModel> GetRelatorioById(int relatorioId)
         {
             var queryArgs = new DynamicParameters();
 
@@ -76,18 +77,15 @@ namespace ControlePresenca.Infra.Query
                             r.observacao,
                             r.oferta,
                             r.quantidadebiblias,
-                            r.classeId,
+                            r.ClasseId,
                             a.Id as Presencas_AlunoId,
                             p.presente as Presencas_Presente,
                             a.nome as Presencas_Aluno_Nome,
-                            (SELECT COUNT(*) FROM presencas WHERE relatorioId = r.id and presente = 1) as Presentes
-                            
-                            FROM Relatorios r 
-
-                            LEFT JOIN Presencas p on p.relatorioId = r.id
-                            LEFT JOIN Alunos a on a.id = p.AlunoId
-    
-                            WHERE r.id = @RelatorioId ; ";
+                            (SELECT COUNT(*) FROM Presencas WHERE relatorioId = r.id AND presente = 1) as Presentes
+                          FROM Relatorios r
+                          LEFT JOIN Presencas p ON p.relatorioId = r.id
+                          LEFT JOIN Alunos a ON a.id = p.AlunoId
+                          WHERE r.id = @RelatorioId;";
 
             var result = await _connection.QueryAsync<dynamic>(query, queryArgs);
 

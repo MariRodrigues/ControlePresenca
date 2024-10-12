@@ -1,10 +1,7 @@
 ﻿using ControlePresenca.Application.Commands.Alunos;
 using ControlePresenca.Domain.Query;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.JsonPatch.Operations;
 using Microsoft.AspNetCore.Mvc;
-using Polly;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Threading.Tasks;
 

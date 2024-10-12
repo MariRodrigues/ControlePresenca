@@ -13,7 +13,7 @@ namespace ContrrolePresenca.Test.Infra.Shared
         public static AppDbContext CreateAppDbContext()
         {
             var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>()
-                .UseMySQL("server=localhost;database=controlePresencaDb;user=root;password=root").Options;
+                .UseSqlServer("server=localhost;database=controlePresencaDb;user=root;password=root").Options;
 
             return new AppDbContext(optionsBuilder);
         }

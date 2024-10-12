@@ -2,14 +2,11 @@
 using ControlePresenca.Domain.Import;
 using ControlePresenca.Domain.Services;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
-using static System.Net.WebRequestMethods;
 
 namespace ControlePresenca.Infra.Services
 {
@@ -61,7 +58,7 @@ namespace ControlePresenca.Infra.Services
             var email = token.Claims.FirstOrDefault(c => c.Type == "email")?.Value;
             var first_name = token.Claims.FirstOrDefault(c => c.Type == "given_name")?.Value;
 
-            CustomUsuario usuario = new CustomUsuario()
+            CustomUsuario usuario = new()
             {
                 Name = name,
                 Email = email,

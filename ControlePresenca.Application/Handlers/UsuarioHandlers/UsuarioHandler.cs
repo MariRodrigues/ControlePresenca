@@ -33,11 +33,6 @@ namespace ControlePresenca.Application.Handlers.UsuarioHandlers
             if (!resultIdentity.Succeeded)
                 return new ResponseApi(false, "Não foi possível cadastrar o usuário!");
 
-            var resultRole = await _userRepository.AdicionarRole(identityUser, "user");
-
-            if (!resultRole.Succeeded)
-                return new ResponseApi(false, "Não foi possível adicionar a role ao usuário!");
-
             return new ResponseApi(true, "Usuário cadastrado com sucesso!");
         }
 

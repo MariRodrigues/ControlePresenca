@@ -1,25 +1,21 @@
 ﻿using ControlePresenca.Domain.Query;
 using ControlePresenca.Domain.ViewModels.Alunos;
-using ControlePresenca.Domain.ViewModels.Relatorios;
 using ControlePresenca.Infra.Data;
 using Dapper;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using MySql.Data.MySqlClient;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ControlePresenca.Infra.Query
 {
     public class AlunoQueries : IAlunoQueries
     {
-        private readonly MySqlConnection _connection;
+        private readonly SqlConnection _connection; 
 
         public AlunoQueries(AppDbContext context)
         {
-            _connection = new MySqlConnection(context.Database.GetConnectionString());
+            _connection = new SqlConnection(context.Database.GetConnectionString());
         }
 
         public async Task<IEnumerable<AlunoViewModel>> GetAll(int? alunoId)
@@ -30,12 +26,11 @@ namespace ControlePresenca.Infra.Query
                             id, 
                             nome,
                             classeId
-                            FROM alunos 
-                             ";
+                          FROM alunos"; // SQL Server deve suportar essa query sem problemas
 
             if (alunoId is not null)
             {
-                query += " WHERE id = @alunoId ";
+                query += " WHERE id = @alunoId";
                 queryArgs.Add("alunoId", alunoId);
             }
 

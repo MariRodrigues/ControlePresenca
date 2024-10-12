@@ -13,14 +13,13 @@ namespace ControlePresenca.Application.Services
 {
     public class TokenService : ITokenService
     {
-        public Token CreateToken(CustomUsuario usuario, string role)
+        public Token CreateToken(CustomUsuario usuario)
         {
             Claim[] direitosUsuario = new Claim[]
             {
                 new Claim("username", usuario.UserName),
                 new Claim("email", usuario.Email),
-                new Claim("name", usuario.Name.ToString()),
-                new Claim(ClaimTypes.Role, role)
+                new Claim("name", usuario.Name.ToString())
             };
 
             var chave = new SymmetricSecurityKey(

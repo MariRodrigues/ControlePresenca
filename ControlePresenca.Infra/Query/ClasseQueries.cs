@@ -1,25 +1,17 @@
 ﻿using ControlePresenca.Domain.Query;
-using ControlePresenca.Domain.ViewModels.Alunos;
 using ControlePresenca.Domain.ViewModels.Classes;
-using ControlePresenca.Domain.ViewModels.Relatorios;
 using ControlePresenca.Infra.Data;
 using Dapper;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using MySql.Data.MySqlClient;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace ControlePresenca.Infra.Query
 {
-    public class ClasseQueries : IClasseQueries
+    public class ClasseQueries(AppDbContext context) : IClasseQueries
     {
-        private readonly MySqlConnection _connection;
-
-        public ClasseQueries(AppDbContext context)
-        {
-            _connection = new MySqlConnection(context.Database.GetConnectionString());
-        }
+        private readonly SqlConnection _connection = new SqlConnection(context.Database.GetConnectionString());
 
         public async Task<IEnumerable<ClasseAlunosViewModel>> GetAll()
         {
@@ -34,9 +26,9 @@ namespace ControlePresenca.Infra.Query
                             a.Id as Alunos_AlunoId,
                             (SELECT COUNT(*) FROM alunos WHERE classeId = c.id) as QuantidadeAlunos,
                             (SELECT COUNT(*) FROM relatorios WHERE classeId = c.id) as QuantidadeRelatorios
-                            FROM classes c
-                            LEFT JOIN professores p ON p.classeId = c.Id
-                            LEFT JOIN alunos a ON a.classeId = c.Id";
+                          FROM classes c
+                          LEFT JOIN professores p ON p.classeId = c.Id
+                          LEFT JOIN alunos a ON a.classeId = c.Id";
 
             var result = await _connection.QueryAsync(query, queryArgs);
 
@@ -49,7 +41,7 @@ namespace ControlePresenca.Infra.Query
 
         public async Task<IEnumerable<ClasseViewModel>> GetAllClasses()
         {
-            var query = @"SELECT Id, nome FROM Classes ";
+            var query = @"SELECT Id, nome FROM Classes";
 
             return await _connection.QueryAsync<ClasseViewModel>(query);
         }
@@ -66,21 +58,17 @@ namespace ControlePresenca.Infra.Query
                             a.nome as Alunos_Nome,
                             a.Id as Alunos_AlunoId,
                             (SELECT COUNT(*) FROM alunos WHERE classeId = c.id) as QuantidadeAlunos
-                            
-                            FROM classes c
-                            LEFT JOIN professores p ON p.classeId = c.Id
-                            LEFT JOIN alunos a ON a.classeId = c.Id
-
-                            WHERE c.Id = @ClasseId
-
-                            LIMIT @quantidadeItens OFFSET @Offset
-
-                            ";
+                          FROM classes c
+                          LEFT JOIN professores p ON p.classeId = c.Id
+                          LEFT JOIN alunos a ON a.classeId = c.Id
+                          WHERE c.Id = @ClasseId
+                          ORDER BY c.id
+                          OFFSET @Offset ROWS FETCH NEXT @QuantidadeItens ROWS ONLY";
 
             var offset = (pagina - 1) * quantidadeItens;
 
             queryArgs.Add("Offset", offset);
-            queryArgs.Add("quantidadeItens", quantidadeItens);
+            queryArgs.Add("QuantidadeItens", quantidadeItens);
             queryArgs.Add("ClasseId", classeId);
 
             var result = await _connection.QueryAsync(query, queryArgs);

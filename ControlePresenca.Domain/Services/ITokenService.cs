@@ -9,6 +9,6 @@ namespace ControlePresenca.Domain.Services
 {
     public interface ITokenService
     {
-        Token CreateToken(CustomUsuario usuario, string role);
+        Token CreateToken(CustomUsuario usuario);
     }
 }

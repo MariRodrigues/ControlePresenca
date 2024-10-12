@@ -4,10 +4,7 @@ using ControlePresenca.Domain.Entities;
 using ControlePresenca.Domain.Repository;
 using ControlePresenca.Domain.Services;
 using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ControlePresenca.Application.Services
@@ -36,8 +33,7 @@ namespace ControlePresenca.Application.Services
             if (!result.Succeeded)
                 return new ResponseApi(false, "Não foi possível fazer login");
 
-            Token token = _tokenService.CreateToken(usuarioIdentity, 
-                _signInManager.UserManager.GetRolesAsync(usuarioIdentity).Result.FirstOrDefault());
+            Token token = _tokenService.CreateToken(usuarioIdentity);
 
             return new ResponseApi(true, "Login realizado com sucesso")
             {
