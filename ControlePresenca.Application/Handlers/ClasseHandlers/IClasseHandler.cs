@@ -9,7 +9,9 @@ using System.Threading.Tasks;
 
 namespace ControlePresenca.Application.Handlers.ClasseHandlers
 {
-    public interface IClasseHandler : IRequestHandler<CreateClasseCommand, ResponseApi>
+    public interface IClasseHandler : 
+        IRequestHandler<CreateClasseCommand, ResponseApi>,
+        IRequestHandler<DeleteClasseCommand, ResponseApi>
     {
     }
 }

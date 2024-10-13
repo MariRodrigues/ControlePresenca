@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace ControlePresenca.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/presenca")]
     public class PresencaController : ControllerBase
     {
         [HttpPost]

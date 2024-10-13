@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace ControlePresenca.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/aluno")]
     public class AlunoController : ControllerBase
     {
         private readonly IAlunoQueries _alunoQueries;
@@ -30,7 +30,7 @@ namespace ControlePresenca.Controllers
         }
 
         [HttpGet]
-        [SwaggerOperation(Summary = "Busca todos os alunos ou aluno por Id",
+        [SwaggerOperation(Summary = "Busca todos os alunos com filtro",
                           OperationId = "Post")]
         [ProducesResponseType(200)]
         public async Task<IActionResult> Cadastrar([FromQuery] int? alunoId)

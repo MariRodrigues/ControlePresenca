@@ -33,7 +33,6 @@ namespace ControlePresenca.Configurations
             using var roleManager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole<int>>>();
 
             // Verifica se o banco de dados existe
-            if (context.Database.GetPendingMigrations().Any())
             {
                 try
                 {

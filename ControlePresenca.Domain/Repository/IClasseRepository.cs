@@ -9,6 +9,7 @@ namespace ControlePresenca.Domain.Repository
 {
     public interface IClasseRepository
     {
+        Task<Classe> GetByName(string name);
         Classe Cadastrar(Classe classe);
         Classe Editar(Classe classe);
         void Deletar(Classe classe);

@@ -10,7 +10,6 @@ services:
     ports:
       - "1433:1433"
 
-
   controle-presenca-api:
     image: marisouzas2/controlepresenca:latest
     container_name: controle-presenca-api

@@ -43,5 +43,11 @@ namespace ControlePresenca.Infra.Repository
         {
             return await _context.Classes.FirstOrDefaultAsync(c => c.Id == id);
         }
+
+        public async Task<Classe> GetByName(string name)
+        {
+            return await _context.Classes.FirstOrDefaultAsync(c => c.Nome.ToLower() == name.ToLower());
+        }
+
     }
 }

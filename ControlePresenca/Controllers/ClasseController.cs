@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace ControlePresenca.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/classe")]
     public class ClasseController : ControllerBase
     {
         private readonly IClasseQueries _classeQueries;
@@ -30,6 +30,16 @@ namespace ControlePresenca.Controllers
             return Ok(response);
         }
 
+        [HttpDelete("{id}")]
+        [SwaggerOperation(Summary = "Deleta classe por Id",
+                          OperationId = "Delete")]
+        [ProducesResponseType(200)]
+        public async Task<IActionResult> DeleteClasse([FromServices] IMediator mediator, int id)
+        {
+            var response = await mediator.Send(new DeleteClasseCommand(id));
+            return Ok(response);
+        }
+
         [HttpGet]
         [SwaggerOperation(Summary = "Busca todas as classes",
                           OperationId = "Get")]
@@ -40,21 +50,11 @@ namespace ControlePresenca.Controllers
             return Ok(response);
         }
 
-        [HttpGet("/alunos")]
-        [SwaggerOperation(Summary = "Busca todos os alunos",
-                          OperationId = "Get")]
-        [ProducesResponseType(200)]
-        public async Task<IActionResult> BuscarAlunos()
-        {
-            var response = await _classeQueries.GetAll();
-            return Ok(response);
-        }
-
-        [HttpGet("{classeId}")]
+        [HttpGet("{classeId}/alunos")]
         [SwaggerOperation(Summary = "Buscar alunos por Classe",
                           OperationId = "Get")]
         [ProducesResponseType(200)]
-        public async Task<IActionResult> BuscarAlunosPorClasse(int classeId, [FromQuery] int pagina, [FromQuery] int quantidadeItens)
+        public async Task<IActionResult> BuscarAlunosPorClasse(int classeId, [FromQuery] int pagina = 1, [FromQuery] int quantidadeItens = 10)
         {
             var response = await _classeQueries.GetByClass(classeId, pagina, quantidadeItens);
 

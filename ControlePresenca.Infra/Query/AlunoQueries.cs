@@ -26,7 +26,7 @@ namespace ControlePresenca.Infra.Query
                             id, 
                             nome,
                             classeId
-                          FROM alunos"; // SQL Server deve suportar essa query sem problemas
+                          FROM alunos"; 
 
             if (alunoId is not null)
             {

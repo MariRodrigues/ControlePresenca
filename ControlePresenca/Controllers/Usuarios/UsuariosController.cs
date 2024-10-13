@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace ControlePresenca.Controllers.Usuarios
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/usuario")]
     public class UsuariosController : ControllerBase
     {
         private readonly IMediator _mediator;
