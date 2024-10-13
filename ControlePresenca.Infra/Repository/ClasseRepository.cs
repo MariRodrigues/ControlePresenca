@@ -41,7 +41,8 @@ namespace ControlePresenca.Infra.Repository
 
         public async Task<Classe> GetById (int id)
         {
-            return await _context.Classes.FirstOrDefaultAsync(c => c.Id == id);
+            return await _context.Classes.Include(classe => classe.Alunos).
+                FirstOrDefaultAsync(c => c.Id == id);
         }
 
         public async Task<Classe> GetByName(string name)

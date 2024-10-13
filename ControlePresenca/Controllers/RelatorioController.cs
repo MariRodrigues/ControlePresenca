@@ -20,6 +20,12 @@ namespace ControlePresenca.Controllers
         public async Task<IActionResult> Cadastrar([FromServices] IMediator mediator, CreateRelatorioCommand command)
         {
             var response = await mediator.Send(command);
+
+            if (response.Infos != null)
+            {
+                return StatusCode(206, response);
+            }
+
             return Ok(response);
         }
 

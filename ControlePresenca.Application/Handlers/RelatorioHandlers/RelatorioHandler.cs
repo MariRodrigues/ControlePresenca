@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Azure.Core;
 using ControlePresenca.Application.Commands.Relatorios;
 using ControlePresenca.Application.Response;
 using ControlePresenca.Domain.Entities;
@@ -35,33 +36,72 @@ namespace ControlePresenca.Application.Handlers.RelatorioHandlers
             if (classe is null)
                 return new ResponseApi(false, "A classe informada não existe");
 
-            if (request.Data is null)
-                request.Data = DateTime.Now;
-
             var relatorio = _mapper.Map<Relatorio>(request);
 
             var newRelatorio = await _relatorioRepository.Cadastrar(relatorio);
 
-            if (newRelatorio is null)
-                return new ResponseApi(false, "Erro ao cadastrar relatório");
+            var presencas = CriarListaAlunosComPresencaFalse(newRelatorio.Id, classe);
 
-            if (request.Presencas.Any())
+            AtualizarPresencas(presencas, request.AlunosPresentesIds, classe, out var erros);
+
+            newRelatorio.Presencas = presencas;
+
+            await _relatorioRepository.Editar(newRelatorio);
+
+            if (erros.Any())
             {
-                foreach (var aluno in request.Presencas)
+                return new ResponseApi(true, "Relatório cadastrado, mas há alunos não encontrados")
                 {
-                    Presenca presenca = new()
-                    {
-                        RelatorioId = newRelatorio.Id,
-                        AlunoId = aluno.AlunoId,
-                        Presente = aluno.Presente
-                    };
-
-                    await _presencaRepository.Cadastrar(presenca);
-                }
+                    Id = newRelatorio.Id,
+                    Infos = erros 
+                };
             }
 
             return new ResponseApi(true, "Relatório cadastrado com sucesso") { Id = newRelatorio.Id };
         }
+
+        private static List<Presenca> CriarListaAlunosComPresencaFalse(int relatorioId, Classe classe)
+        {
+            var presencas = new List<Presenca>();
+
+            foreach (var aluno in classe.Alunos)
+            {
+                Presenca presenca = new()
+                {
+                    RelatorioId = relatorioId,
+                    AlunoId = aluno.Id,
+                    Presente = false
+                };
+
+                presencas.Add(presenca);
+            }
+
+            return presencas;
+        }
+
+        private static void AtualizarPresencas(List<Presenca> presencas, List<int> alunosPresentesIds, Classe classe, out List<int> erros)
+        {
+            erros = new List<int>();
+
+            foreach (var alunoId in alunosPresentesIds)
+            {
+                var alunoNaClasse = classe.Alunos.Any(a => a.Id == alunoId);
+
+                if (alunoNaClasse)
+                {
+                    var presenca = presencas.FirstOrDefault(p => p.AlunoId == alunoId);
+                    if (presenca != null)
+                    {
+                        presenca.Presente = true;
+                    }
+                }
+                else
+                {
+                    erros.Add(alunoId);
+                }
+            }
+        }
+
 
         public async Task<ResponseApi> Handle(UpdateRelatorioCommand request, CancellationToken cancellationToken)
         {
@@ -84,7 +124,6 @@ namespace ControlePresenca.Application.Handlers.RelatorioHandlers
             else
                 return new ResponseApi(false, "Não foi possível atualizar o relatório.");
         }
-
 
         private async Task<List<Presenca>> ValidPresenca(int relatrorioId, List<UpdatePresencaDTO> presencaList)
         {

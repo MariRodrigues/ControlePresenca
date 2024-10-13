@@ -13,8 +13,12 @@ namespace ControlePresenca.Application.Profiles
     {
         public RelatorioProfile()
         {
+            // Mapeamento de CreateRelatorioCommand para Relatorio
             CreateMap<CreateRelatorioCommand, Relatorio>();
+
+            // Mapeamento de UpdateRelatorioCommand para Relatorio
             CreateMap<UpdateRelatorioCommand, Relatorio>();
+
         }
     }
 }
