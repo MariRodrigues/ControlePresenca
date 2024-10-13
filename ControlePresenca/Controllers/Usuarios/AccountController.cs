@@ -9,17 +9,8 @@ namespace ControlePresenca.Controllers.Usuarios
 {
     [ApiController]
     [Route("api/account")]
-    public class AccountController : ControllerBase
+    public class AccountController(LoginService loginService) : ControllerBase
     {
-        private readonly LoginService _loginService;
-        private readonly ITokenService _tokenService;
-
-        public AccountController(LoginService loginService, ITokenService tokenService)
-        {
-            _loginService = loginService;
-            _tokenService = tokenService;
-        }
-
         [HttpPost("login")]
         [SwaggerOperation(Summary = "Fazer login do usuário",
                           OperationId = "Post")]
@@ -27,7 +18,7 @@ namespace ControlePresenca.Controllers.Usuarios
         [ProducesResponseType(401)]
         public async Task<IActionResult> LogaUsuario(LoginRequest request)
         {
-            var result = await _loginService.LoginUsuario(request);
+            var result = await loginService.LoginUsuario(request);
 
             if (!result.Success)
                 return Unauthorized(result.Message);
