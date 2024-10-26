@@ -19,22 +19,27 @@ namespace ControlePresenca.Application.Handlers.RelatorioHandlers
         private readonly IRelatorioRepository _relatorioRepository;
         private readonly IAlunoRepository _alunoRepository;
         private readonly IPresencaRepository _presencaRepository;
+        private readonly IProfessorRepository _professorRepository;
 
-        public RelatorioHandler(IMapper mapper, IClasseRepository classeRepository, IRelatorioRepository relatorioRepository, IAlunoRepository alunoRepository, IPresencaRepository presencaRepository)
+        public RelatorioHandler(IMapper mapper, IClasseRepository classeRepository, IRelatorioRepository relatorioRepository, IAlunoRepository alunoRepository, IPresencaRepository presencaRepository, IProfessorRepository professorRepository)
         {
             _mapper = mapper;
             _classeRepository = classeRepository;
             _relatorioRepository = relatorioRepository;
             _alunoRepository = alunoRepository;
             _presencaRepository = presencaRepository;
+            _professorRepository = professorRepository;
         }
 
         public async Task<ResponseApi> Handle(CreateRelatorioCommand request, CancellationToken cancellationToken)
         {
             var classe = await _classeRepository.GetById(request.ClasseId);
-
             if (classe is null)
                 return new ResponseApi(false, "A classe informada não existe");
+
+            var professor = _professorRepository.GetById(request.ProfessorId);
+            if (professor is null)
+                return new ResponseApi(false, "O professor informado não existe");
 
             var relatorio = _mapper.Map<Relatorio>(request);
 
@@ -48,7 +53,7 @@ namespace ControlePresenca.Application.Handlers.RelatorioHandlers
 
             await _relatorioRepository.Editar(newRelatorio);
 
-            if (erros.Any())
+            if (erros?.Count != 0)
             {
                 return new ResponseApi(true, "Relatório cadastrado, mas há alunos não encontrados")
                 {

@@ -2,53 +2,39 @@
 using ControlePresenca.Domain.Repository;
 using ControlePresenca.Infra.Data;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ControlePresenca.Infra.Repository
 {
-    public class ClasseRepository : IClasseRepository
+    public class ClasseRepository(AppDbContext context) : IClasseRepository
     {
-        private readonly AppDbContext _context;
-
-        public ClasseRepository(AppDbContext context)
-        {
-            _context = context;
-        }
-
         public Classe Cadastrar(Classe classe)
         {
-            _context.Classes.Add(classe);
-            _context.SaveChanges();
+            context.Classes.Add(classe);
+            context.SaveChanges();
             return classe;
         }
 
         public Classe Editar(Classe classe)
         {
-            _context.Classes.Update(classe);
-            _context.SaveChanges();
+            context.Classes.Update(classe);
+            context.SaveChanges();
             return classe;
         }
 
         public void Deletar (Classe classe)
         {
-            _context.Classes.Remove(classe);
-            _context.SaveChanges();
+            context.Classes.Remove(classe);
+            context.SaveChanges();
         }
 
         public async Task<Classe> GetById (int id)
         {
-            return await _context.Classes.Include(classe => classe.Alunos).
+            return await context.Classes.Include(classe => classe.Alunos).
                 FirstOrDefaultAsync(c => c.Id == id);
         }
 
         public async Task<Classe> GetByName(string name)
-        {
-            return await _context.Classes.FirstOrDefaultAsync(c => c.Nome.ToLower() == name.ToLower());
-        }
-
+            => await context.Classes.FirstOrDefaultAsync(c => c.Nome.ToLower() == name.ToLower());
     }
 }

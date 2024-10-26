@@ -10,8 +10,6 @@ namespace ControlePresenca.Domain.Entities
     {
         public int Id { get; set; }
         public string Nome { get; set; }
-        public virtual Classe Classe { get; set; }
-        public int ClasseId { get; set; }
-
+        public virtual List<Relatorio> Relatorios { get; set; }
     }
 }

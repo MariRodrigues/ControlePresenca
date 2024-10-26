@@ -25,12 +25,16 @@ namespace ControlePresenca.Infra.Query
             var queryArgs = new DynamicParameters();
 
             var query = @"SELECT
-                            r.id as RelatorioId, 
-                            r.data,
-                            c.Nome as NomeClasse
-                          FROM Relatorios r
-                          INNER JOIN Classes c ON c.ID = r.ClasseId
-                          WHERE ";
+                           r.id as RelatorioId, 
+                           r.data,
+                           c.Nome as NomeClasse,
+                           Count(p.Id) as QuantidadePresentes
+
+                        FROM Relatorios r
+                        INNER JOIN Classes c ON c.ID = r.ClasseId
+                        LEFT JOIN Presencas p ON p.RelatorioId = r.Id AND p.Presente = 1
+
+                        WHERE ";
 
             if (data != null)
             {
@@ -50,7 +54,8 @@ namespace ControlePresenca.Infra.Query
             else
                 query = query.Remove(query.LastIndexOf("AND"));
 
-            // Paginação no SQL Server usando OFFSET e FETCH
+            query += " GROUP BY r.id, r.data, c.nome ";
+
             if (quantidadeItens != 0 && pagina != 0)
             {
                 query += " ORDER BY r.id OFFSET @Offset ROWS FETCH NEXT @QuantidadeItens ROWS ONLY";

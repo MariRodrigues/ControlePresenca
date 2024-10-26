@@ -27,11 +27,6 @@ namespace ControlePresenca.Application.Handlers.ProfessorHandlers
 
         public async Task<ResponseApi> Handle(CreateProfessorCommand request, CancellationToken cancellationToken)
         {
-            var classe = await _classeRepository.GetById(request.ClasseId);
-
-            if (classe is null)
-                return new ResponseApi(false, "A categoria informada não existe");
-
             var professor = _mapper.Map<Professor>(request);
 
             var response = _professorRepository.Cadastrar(professor);

@@ -10,5 +10,6 @@ namespace ControlePresenca.Domain.ViewModels.Classes
     {
         public int Id { get; set; }
         public string Nome { get;}
+        public int QuantidadeAlunos { get;}
     }
 }

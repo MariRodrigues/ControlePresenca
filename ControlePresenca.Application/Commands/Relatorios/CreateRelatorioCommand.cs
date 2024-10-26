@@ -14,6 +14,7 @@ namespace ControlePresenca.Application.Commands.Relatorios
         public DateTime? Data { get; set; } = DateTime.Now;
         public string Observacao { get; set; }
         public double Oferta { get; set; }
+        public int ProfessorId { get; set; }
         public int QuantidadeBiblias { get; set; }
         public int QuantidadeRevistas { get; set; }
         public int QuantidadeVisitantes { get; set; }

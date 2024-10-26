@@ -11,5 +11,6 @@ namespace ControlePresenca.Domain.Repository
     {
         Professor Cadastrar(Professor professor);
         Professor GetById(int id);
+        IEnumerable<Professor> GetAll();
     }
 }

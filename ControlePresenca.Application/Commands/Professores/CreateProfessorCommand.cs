@@ -11,7 +11,6 @@ namespace ControlePresenca.Application.Commands.Professores
     public class CreateProfessorCommand : IRequest<ResponseApi>
     {
         public string Nome { get; set; }
-        public int ClasseId { get; set; }
     }
 
 }

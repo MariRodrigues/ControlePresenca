@@ -3,6 +3,7 @@ using ControlePresenca.Domain.Repository;
 using ControlePresenca.Infra.Data;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,10 +14,7 @@ namespace ControlePresenca.Infra.Repository
     {
         private readonly AppDbContext _context;
 
-        public ProfessorRepository(AppDbContext context)
-        {
-            _context = context;
-        }
+        public ProfessorRepository(AppDbContext context) => _context = context;
 
         public Professor Cadastrar(Professor professor)
         {
@@ -28,6 +26,11 @@ namespace ControlePresenca.Infra.Repository
         public Professor GetById(int id)
         {
             return _context.Professores.FirstOrDefault(p => p.Id == id);
+        }
+
+        public IEnumerable<Professor> GetAll()
+        {
+            return _context.Professores.ToList();
         }
     }
 }

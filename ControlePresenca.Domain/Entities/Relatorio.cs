@@ -15,6 +15,8 @@ namespace ControlePresenca.Domain.Entities
         public string Observacao { get; set; }
         public virtual Classe Classe { get; set; }
         public double Oferta { get; set; }
+        public virtual Professor Professor { get; set; }
+        public int ProfessorId { get; set; }
         public int QuantidadeBiblias { get; set; }
         public int QuantidadeRevistas { get; set; }
         public int QuantidadeVisitantes { get; set; }                  

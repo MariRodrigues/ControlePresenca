@@ -10,6 +10,7 @@ namespace ControlePresenca.Domain.ViewModels.Relatorios
     {
         public int RelatorioId { get; set; }
         public string NomeClasse { get; set; }
+        public int QuantidadePresentes { get; set; }
         public DateTime Data { get; set; }
     }
 

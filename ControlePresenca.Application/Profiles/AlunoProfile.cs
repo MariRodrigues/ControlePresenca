@@ -15,7 +15,6 @@ namespace ControlePresenca.Application.Profiles
         public AlunoProfile()
         {
             CreateMap<CreateAlunoCommand, Aluno>();
-            CreateMap<UpdateAlunoDTO, Aluno>();
         }
     }
 }

@@ -41,7 +41,17 @@ namespace ControlePresenca.Infra.Query
 
         public async Task<IEnumerable<ClasseViewModel>> GetAllClasses()
         {
-            var query = @"SELECT Id, nome FROM Classes";
+            var query = @"SELECT 
+                            c.Id, 
+                            c.Nome,
+                            COUNT(a.ClasseId) AS QuantidadeAlunos
+                        FROM 
+                            Classes c
+                        LEFT JOIN 
+                            Alunos a ON a.ClasseId = c.Id
+                        GROUP BY 
+                            c.Id, 
+                            c.Nome;";
 
             return await _connection.QueryAsync<ClasseViewModel>(query);
         }

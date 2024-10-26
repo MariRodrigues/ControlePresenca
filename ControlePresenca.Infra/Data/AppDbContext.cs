@@ -21,17 +21,16 @@ namespace ControlePresenca.Infra.Data
                 .HasForeignKey(aluno => aluno.ClasseId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Professor>()
-                .HasOne(professor => professor.Classe)
-                .WithMany(classe => classe.Professores)
-                .HasForeignKey(professor => professor.ClasseId)
-                .OnDelete(DeleteBehavior.Restrict);
-
             modelBuilder.Entity<Relatorio>()
                 .HasOne(relatorio => relatorio.Classe)
                 .WithMany(classe => classe.Relatorios)
                 .HasForeignKey(relatorio => relatorio.ClasseId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Professor>()
+                .HasMany(p => p.Relatorios)
+                .WithOne(r => r.Professor)
+                .HasForeignKey(r => r.ProfessorId);
 
             modelBuilder.Entity<Presenca>()
                 .HasOne(presenca => presenca.Relatorio)
