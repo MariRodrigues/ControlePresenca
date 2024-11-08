@@ -1,42 +1,44 @@
-trigger:
-  branches:
-    include:
-      - main
+name: Build and Deploy to Azure Web App
 
-pool:
-  vmImage: 'ubuntu-latest'
+on:
+  push:
+    branches:
+      - main 
 
-variables:
-  buildConfiguration: 'Release'
-  azureWebAppName: 'web-app-controle-presenca'
-  azureServiceConnection: 'githubactionsconnection' 
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
 
-steps:
-- task: UseDotNet@2
-  inputs:
-    packageType: 'sdk'
-    version: '8.x'
-    installationPath: $(Agent.ToolsDirectory)/dotnet
+    steps:
+    # Passo 1: Checkout do Repositório
+    - name: Checkout Repository
+      uses: actions/checkout@v2
 
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'restore'
-    projects: '**/*.csproj'
+    # Passo 2: Configurar o .NET
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '8.0.x' 
 
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'build'
-    projects: '**/*.csproj'
-    arguments: '--configuration $(buildConfiguration)'
+    # Passo 3: Construir o Projeto .NET
+    - name: Build .NET Project
+      run: dotnet build --configuration Release
 
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'publish'
-    projects: '**/*.csproj'
-    arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/publish'
+    # Passo 4: Publicar o Projeto .NET em uma Pasta para Deploy
+    - name: Publish .NET Project
+      run: dotnet publish -c Release -o ./publish
 
-- task: AzureWebApp@1
-  inputs:
-    azureSubscription: $(azureServiceConnection)
-    appName: $(azureWebAppName)
-    package: '$(Build.ArtifactStagingDirectory)/publish'
+    # Passo 5: Fazer Login no Azure com as Credenciais
+    - name: Login to Azure
+      uses: azure/login@v1
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+    # Passo 6: Fazer Deploy no Azure Web App
+    - name: Deploy to Azure Web App
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: ${{ secrets.AZURE_WEBAPP_NAME }}
+        package: ./publish 
