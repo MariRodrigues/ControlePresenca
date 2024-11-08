@@ -3,8 +3,8 @@ name: Build and Deploy to Azure Web App
 on:
   push:
     branches:
-      - main 
-# add coment
+      - master
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
