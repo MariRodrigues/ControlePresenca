@@ -33,10 +33,10 @@ jobs:
       run: dotnet publish -c Release -o ./publish
 
     # Passo 5: Fazer Login no Azure com as Credenciais
-    - name: Login to Azure
+    - name: Azure Login
       uses: azure/login@v1
       with:
-        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        client-id: 8c3b8178-7ade-49f5-9bdf-fedf185849bc
         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
