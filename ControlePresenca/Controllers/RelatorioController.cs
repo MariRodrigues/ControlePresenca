@@ -1,4 +1,5 @@
 ﻿using ControlePresenca.Application.Commands.Relatorios;
+using ControlePresenca.Application.Services;
 using ControlePresenca.Domain.Query;
 using ControlePresenca.Domain.Repository;
 using MediatR;
@@ -11,7 +12,7 @@ namespace ControlePresenca.Controllers
 {
     [ApiController]
     [Route("api/relatorio")]
-    public class RelatorioController(IRelatorioQueries relatorioQueries, IRelatorioRepository relatorioRepository) : ControllerBase
+    public class RelatorioController(IRelatorioQueries relatorioQueries, IDocumentServices documentServices) : ControllerBase
     {
         [HttpPost]
         [ProducesResponseType(200)]
@@ -47,6 +48,17 @@ namespace ControlePresenca.Controllers
         {
             var response = await relatorioQueries.GetAllFilter(classeId, data, pagina, quantidadeItens);
             return Ok(response);
+        }
+
+        [HttpGet("geral/planilha")]
+        [SwaggerOperation(Summary = "Busca o relatório e gera um arquivo XLSX",
+                          OperationId = "Get")]
+        [ProducesResponseType(200)]
+        public async Task<IActionResult> GerarXlsx()
+        {
+            var response = await documentServices.GenerateRelatorioExcel();
+
+            return File(response, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "RelatorioGeral.xlsx");
         }
 
         [HttpGet("{relatorioId}")]

@@ -11,5 +11,6 @@ namespace ControlePresenca.Domain.Query
     {
         Task<IEnumerable<RelatorioViewModel>> GetAllFilter(int? classeId, DateTime? data, int pagina, int quantidadeItens);
         Task<RelatorioPresencaViewModel> GetRelatorioById(int relatorioId);
+        Task<IEnumerable<GeneralRelatorioViewModel>> GetGeneralRelatorio();
     }
 }

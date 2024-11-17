@@ -36,6 +36,7 @@ namespace ControlePresenca.Configurations
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<ILoginRepository, LoginRepository>();
             services.AddScoped<LoginService, LoginService>();
+            services.AddScoped<IDocumentServices, DocumentServices>();
 
             services.AddSwaggerGen(c =>
             {

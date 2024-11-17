@@ -2,7 +2,7 @@
 using ControlePresenca.Domain.ViewModels.Relatorios;
 using ControlePresenca.Infra.Data;
 using Dapper;
-using Microsoft.Data.SqlClient; // Usando SqlClient para SQL Server
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -13,7 +13,7 @@ namespace ControlePresenca.Infra.Query
 {
     public class RelatorioQueries : IRelatorioQueries
     {
-        private readonly SqlConnection _connection; // Troca para SqlConnection
+        private readonly SqlConnection _connection;
 
         public RelatorioQueries(AppDbContext context)
         {
@@ -95,6 +95,32 @@ namespace ControlePresenca.Infra.Query
             var result = await _connection.QueryAsync<dynamic>(query, queryArgs);
 
             return Slapper.AutoMapper.MapDynamic<RelatorioPresencaViewModel>(result).FirstOrDefault();
+        }
+
+        public async Task<IEnumerable<GeneralRelatorioViewModel>> GetGeneralRelatorio()
+        {
+            var query = @" SELECT 
+                             r.Id as RelatorioId,
+                             r.data as Data,
+                             r.Observacao as Observacao,
+                             a.Nome as NomeAluno,
+                             prof.Nome as NomeProfessor,
+                             CASE
+	                            WHEN p.Presente = 1 THEN 'Presente'
+                             ELSE 'Faltou' END as 'Presenca',
+                             c.Nome as Turma
+
+                             FROM Relatorios r
+                             INNER JOIN Presencas p ON p.RelatorioId = r.Id
+                             INNER JOIN Alunos a ON a.Id = p.AlunoId
+                             INNER JOIN Professores prof ON prof.Id = r.ProfessorId
+                             INNER JOIN Classes c ON c.id = r.ClasseId
+
+                             ORDER BY r.Data DESC";
+
+            var result = await _connection.QueryAsync<GeneralRelatorioViewModel>(query);
+
+            return result;
         }
     }
 }
