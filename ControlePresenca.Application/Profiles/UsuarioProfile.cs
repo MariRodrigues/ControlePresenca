@@ -2,13 +2,12 @@
 using ControlePresenca.Application.Commands.Usuarios;
 using ControlePresenca.Domain.Entities;
 
-namespace ControlePresenca.Application.Profiles
+namespace ControlePresenca.Application.Profiles;
+
+public class UsuarioProfile : Profile
 {
-    public class UsuarioProfile : Profile
+    public UsuarioProfile()
     {
-        public UsuarioProfile()
-        {
-            CreateMap<CreateUsuarioCommand, CustomUsuario>();
-        }
+        CreateMap<CreateUsuarioCommand, CustomUsuario>();
     }
 }

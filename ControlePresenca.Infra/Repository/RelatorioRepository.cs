@@ -1,48 +1,43 @@
 ﻿using ControlePresenca.Domain.Entities;
-using ControlePresenca.Domain.Repository;
 using ControlePresenca.Infra.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace ControlePresenca.Infra.Repository
+namespace ControlePresenca.Infra.Repository;
+
+public class RelatorioRepository(AppDbContext context) : IRelatorioRepository
 {
-    public class RelatorioRepository : IRelatorioRepository
+    public async Task<Relatorio> Cadastrar(Relatorio relatorio)
     {
-        private readonly AppDbContext _context;
+        context.Relatorios.Add(relatorio);
+        context.SaveChanges();
+        return relatorio;
+    }
 
-        public RelatorioRepository(AppDbContext context)
+    public async Task<Relatorio> GetById(int id)
+    {
+        return await context.Relatorios.FirstOrDefaultAsync(r => r.Id == id);
+    }
+
+    public async Task<bool> Editar(Relatorio relatorio)
+    {
+        try
         {
-            _context = context;
+            context.Relatorios.Update(relatorio);
+            await context.SaveChangesAsync();
+            return true;
         }
-
-        public async Task<Relatorio> Cadastrar(Relatorio relatorio)
+        catch (Exception ex)
         {
-            _context.Relatorios.Add(relatorio);
-            _context.SaveChanges();
-            return relatorio;
-        }
-
-        public async Task<Relatorio> GetById(int id)
-        {
-            return await _context.Relatorios.FirstOrDefaultAsync(r => r.Id == id);
-        }
-
-        public async Task<bool> Editar(Relatorio relatorio)
-        {
-            try
-            {
-                _context.Relatorios.Update(relatorio);
-                await _context.SaveChangesAsync();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
+            return false;
         }
     }
+}
+
+public interface IRelatorioRepository
+{
+    Task<Relatorio> Cadastrar(Relatorio relatorio);
+    Task<Relatorio> GetById(int id);
+    Task<bool> Editar(Relatorio relatorio);
 }

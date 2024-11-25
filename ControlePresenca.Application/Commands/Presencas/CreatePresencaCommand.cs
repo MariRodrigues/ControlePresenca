@@ -1,16 +1,10 @@
 ﻿using ControlePresenca.Application.Response;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace ControlePresenca.Application.Commands.Presencas
+namespace ControlePresenca.Application.Commands.Presencas;
+
+public class CreatePresencaCommand : IRequest<ResponseApi>
 {
-    public class CreatePresencaCommand : IRequest<ResponseApi>
-    {
-        public int AlunoId { get; set; }
-        public int RelatorioId { get; set; }
-    }
+    public int AlunoId { get; set; }
+    public int RelatorioId { get; set; }
 }

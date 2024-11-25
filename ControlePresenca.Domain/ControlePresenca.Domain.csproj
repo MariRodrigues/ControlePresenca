@@ -5,7 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="ViewModels\Usuarios\" />
+    <Compile Remove="ViewModels\Usuarios\**" />
+    <EmbeddedResource Remove="ViewModels\Usuarios\**" />
+    <None Remove="ViewModels\Usuarios\**" />
   </ItemGroup>
 
   <ItemGroup>

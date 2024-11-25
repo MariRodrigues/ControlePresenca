@@ -3,38 +3,27 @@ using ControlePresenca.Application.Commands.Professores;
 using ControlePresenca.Application.Response;
 using ControlePresenca.Domain.Entities;
 using ControlePresenca.Domain.Repository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ControlePresenca.Application.Handlers.ProfessorHandlers
+namespace ControlePresenca.Application.Handlers.ProfessorHandlers;
+
+public interface IProfessorHandler : IRequestHandler<CreateProfessorCommand, ResponseApi> { }
+
+public class ProfessorHandler(
+    IMapper mapper, 
+    IProfessorRepository professorRepository) : IProfessorHandler
 {
-    public class ProfessorHandler : IProfessorHandler
+    public async Task<ResponseApi> Handle(CreateProfessorCommand request, CancellationToken cancellationToken)
     {
-        private readonly IClasseRepository _classeRepository;
-        private readonly IMapper _mapper;
-        private readonly IProfessorRepository _professorRepository;
+        var professor = mapper.Map<Professor>(request);
 
-        public ProfessorHandler(IClasseRepository classeRepository, IMapper mapper, IProfessorRepository professorRepository)
-        {
-            _classeRepository = classeRepository;
-            _mapper = mapper;
-            _professorRepository = professorRepository;
-        }
+        var response = professorRepository.Cadastrar(professor);
 
-        public async Task<ResponseApi> Handle(CreateProfessorCommand request, CancellationToken cancellationToken)
-        {
-            var professor = _mapper.Map<Professor>(request);
+        if (response is null)
+            return new ResponseApi(false, "Erro ao cadastrar professor");
 
-            var response = _professorRepository.Cadastrar(professor);
-
-            if (response is null)
-                return new ResponseApi(false, "Erro ao cadastrar professor");
-
-            return new ResponseApi(true, "Professor cadastrado com sucesso");
-        }
+        return new ResponseApi(true, "Professor cadastrado com sucesso");
     }
 }

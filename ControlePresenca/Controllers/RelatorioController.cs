@@ -1,18 +1,19 @@
 ﻿using ControlePresenca.Application.Commands.Relatorios;
 using ControlePresenca.Application.Services;
-using ControlePresenca.Domain.Query;
-using ControlePresenca.Domain.Repository;
-using MediatR;
-using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
-using System;
+using ControlePresenca.Domain.Query;
+using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using MediatR;
+using System;
 
 namespace ControlePresenca.Controllers
 {
     [ApiController]
     [Route("api/relatorio")]
-    public class RelatorioController(IRelatorioQueries relatorioQueries, IDocumentServices documentServices) : ControllerBase
+    public class RelatorioController(
+        IRelatorioQueries relatorioQueries, 
+        IDocumentServices documentServices) : ControllerBase
     {
         [HttpPost]
         [ProducesResponseType(200)]

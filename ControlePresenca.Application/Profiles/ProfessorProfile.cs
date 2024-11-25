@@ -2,13 +2,12 @@
 using ControlePresenca.Application.Commands.Professores;
 using ControlePresenca.Domain.Entities;
 
-namespace ControlePresenca.Application.Profiles
+namespace ControlePresenca.Application.Profiles;
+
+public class ProfessorProfile : Profile
 {
-    public class ProfessorProfile : Profile
+    public ProfessorProfile()
     {
-        public ProfessorProfile()
-        {
-            CreateMap<CreateProfessorCommand, Professor>();
-        }
+        CreateMap<CreateProfessorCommand, Professor>();
     }
 }

@@ -1,5 +1,4 @@
-﻿using ControlePresenca.Domain.Query;
-using ControlePresenca.Domain.ViewModels.Relatorios;
+﻿using ControlePresenca.Domain.ViewModels.Relatorios;
 using ControlePresenca.Infra.Data;
 using Dapper;
 using Microsoft.Data.SqlClient;
@@ -9,22 +8,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ControlePresenca.Infra.Query
+namespace ControlePresenca.Infra.Query;
+
+public class RelatorioQueries(
+    AppDbContext context) : IRelatorioQueries
 {
-    public class RelatorioQueries : IRelatorioQueries
+    private readonly SqlConnection _connection = new(context.Database.GetConnectionString());
+
+    public async Task<IEnumerable<RelatorioViewModel>> GetAllFilter(
+        int? classeId, DateTime? startDate, DateTime? endDate, int pagina, int quantidadeItens)
     {
-        private readonly SqlConnection _connection;
+        var queryArgs = new DynamicParameters();
 
-        public RelatorioQueries(AppDbContext context)
-        {
-            _connection = new SqlConnection(context.Database.GetConnectionString());
-        }
-
-        public async Task<IEnumerable<RelatorioViewModel>> GetAllFilter(int? classeId, DateTime? startDate, DateTime? endDate, int pagina, int quantidadeItens)
-        {
-            var queryArgs = new DynamicParameters();
-
-            var query = @"SELECT
+        var query = @"SELECT
                            r.id as RelatorioId, 
                            r.data,
                            c.Nome as NomeClasse,
@@ -36,47 +32,47 @@ namespace ControlePresenca.Infra.Query
 
                         WHERE ";
 
-            if (startDate != null && endDate != null)
-            {
-                query += " r.data >= @startDate AND r.data <= @endDate AND ";
-                queryArgs.Add("@startDate", startDate.Value);
-                queryArgs.Add("@endDate", endDate.Value);
-            }
-
-            if (classeId != null)
-            {
-                query += " r.ClasseId = @classeId AND ";
-                queryArgs.Add("classeId", classeId);
-            }
-
-            if (startDate == null && classeId == null)
-                query = query.Remove(query.LastIndexOf("WHERE"));
-            else
-                query = query.Remove(query.LastIndexOf("AND"));
-
-            query += " GROUP BY r.id, r.data, c.nome ";
-
-            if (quantidadeItens != 0 && pagina != 0)
-            {
-                query += " ORDER BY r.id OFFSET @Offset ROWS FETCH NEXT @QuantidadeItens ROWS ONLY";
-
-                var offset = (pagina - 1) * quantidadeItens;
-                queryArgs.Add("Offset", offset);
-                queryArgs.Add("QuantidadeItens", quantidadeItens);
-            }
-
-            var result = await _connection.QueryAsync<RelatorioViewModel>(query, queryArgs);
-
-            return result;
+        if (startDate != null && endDate != null)
+        {
+            query += " r.data >= @startDate AND r.data <= @endDate AND ";
+            queryArgs.Add("@startDate", startDate.Value);
+            queryArgs.Add("@endDate", endDate.Value);
         }
 
-        public async Task<RelatorioPresencaViewModel> GetRelatorioById(int relatorioId)
+        if (classeId != null)
         {
-            var queryArgs = new DynamicParameters();
+            query += " r.ClasseId = @classeId AND ";
+            queryArgs.Add("classeId", classeId);
+        }
 
-            queryArgs.Add("RelatorioId", relatorioId);
+        if (startDate == null && classeId == null)
+            query = query.Remove(query.LastIndexOf("WHERE"));
+        else
+            query = query.Remove(query.LastIndexOf("AND"));
 
-            var query = @"SELECT
+        query += " GROUP BY r.id, r.data, c.nome ";
+
+        if (quantidadeItens != 0 && pagina != 0)
+        {
+            query += " ORDER BY r.id OFFSET @Offset ROWS FETCH NEXT @QuantidadeItens ROWS ONLY";
+
+            var offset = (pagina - 1) * quantidadeItens;
+            queryArgs.Add("Offset", offset);
+            queryArgs.Add("QuantidadeItens", quantidadeItens);
+        }
+
+        var result = await _connection.QueryAsync<RelatorioViewModel>(query, queryArgs);
+
+        return result;
+    }
+
+    public async Task<RelatorioPresencaViewModel> GetRelatorioById(int relatorioId)
+    {
+        var queryArgs = new DynamicParameters();
+
+        queryArgs.Add("RelatorioId", relatorioId);
+
+        var query = @"SELECT
                             r.Id, 
 	                        r.data,
                             r.observacao,
@@ -94,14 +90,14 @@ namespace ControlePresenca.Infra.Query
                           LEFT JOIN Professores prof ON prof.Id = r.ProfessorId
                           WHERE r.id = @RelatorioId;";
 
-            var result = await _connection.QueryAsync<dynamic>(query, queryArgs);
+        var result = await _connection.QueryAsync<dynamic>(query, queryArgs);
 
-            return Slapper.AutoMapper.MapDynamic<RelatorioPresencaViewModel>(result).FirstOrDefault();
-        }
+        return Slapper.AutoMapper.MapDynamic<RelatorioPresencaViewModel>(result).FirstOrDefault();
+    }
 
-        public async Task<IEnumerable<GeneralRelatorioViewModel>> GetGeneralRelatorio()
-        {
-            var query = @" SELECT 
+    public async Task<IEnumerable<GeneralRelatorioViewModel>> GetGeneralRelatorio()
+    {
+        var query = @" SELECT 
                              r.Id as RelatorioId,
                              r.data as Data,
                              r.Observacao as Observacao,
@@ -120,9 +116,15 @@ namespace ControlePresenca.Infra.Query
 
                              ORDER BY r.Data DESC";
 
-            var result = await _connection.QueryAsync<GeneralRelatorioViewModel>(query);
+        var result = await _connection.QueryAsync<GeneralRelatorioViewModel>(query);
 
-            return result;
-        }
+        return result;
     }
+}
+
+public interface IRelatorioQueries
+{
+    Task<IEnumerable<RelatorioViewModel>> GetAllFilter(int? classeId, DateTime? startDate, DateTime? endDate, int pagina, int quantidadeItens);
+    Task<RelatorioPresencaViewModel> GetRelatorioById(int relatorioId);
+    Task<IEnumerable<GeneralRelatorioViewModel>> GetGeneralRelatorio();
 }

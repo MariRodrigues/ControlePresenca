@@ -3,39 +3,33 @@ using ControlePresenca.Application.Commands.Alunos;
 using ControlePresenca.Application.Response;
 using ControlePresenca.Domain.Entities;
 using ControlePresenca.Domain.Repository;
+using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ControlePresenca.Application.Handlers.AlunoHandlers
+namespace ControlePresenca.Application.Handlers.AlunoHandlers;
+
+public interface IAlunoHandler : IRequestHandler<CreateAlunoCommand, ResponseApi> { }
+
+public class AlunoHandler(
+    IClasseRepository classeRepository, 
+    IAlunoRepository alunoRepository, 
+    IMapper mapper) : IAlunoHandler
 {
-    public class AlunoHandler : IAlunoHandler
+    public async Task<ResponseApi> Handle(CreateAlunoCommand request, CancellationToken cancellationToken)
     {
-        private readonly IClasseRepository _classeRepository;
-        private readonly IAlunoRepository _alunoRepository;
-        private readonly IMapper _mapper;
+        var classe = await classeRepository.GetById(request.ClasseId);
 
-        public AlunoHandler(IClasseRepository classeRepository, IAlunoRepository alunoRepository, IMapper mapper)
-        {
-            _classeRepository = classeRepository;
-            _alunoRepository = alunoRepository;
-            _mapper = mapper;
-        }
+        if (classe is null)
+            return new ResponseApi(false, "A classe informada não existe");
 
-        public async Task<ResponseApi> Handle(CreateAlunoCommand request, CancellationToken cancellationToken)
-        {
-            var classe = await _classeRepository.GetById(request.ClasseId);
+        var aluno = mapper.Map<Aluno>(request);
 
-            if (classe is null)
-                return new ResponseApi(false, "A classe informada não existe");
+        var response = alunoRepository.Cadastrar(aluno);
 
-            var aluno = _mapper.Map<Aluno>(request);
+        if (response is null)
+            return new ResponseApi(false, "Erro ao cadastrar aluno");
 
-            var response = _alunoRepository.Cadastrar(aluno);
-
-            if (response is null)
-                return new ResponseApi(false, "Erro ao cadastrar aluno");
-
-            return new ResponseApi(true, "Aluno cadastrado com sucesso");
-        }
+        return new ResponseApi(true, "Aluno cadastrado com sucesso");
     }
 }

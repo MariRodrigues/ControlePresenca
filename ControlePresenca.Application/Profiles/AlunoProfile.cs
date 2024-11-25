@@ -2,13 +2,12 @@
 using ControlePresenca.Application.Commands.Alunos;
 using ControlePresenca.Domain.Entities;
 
-namespace ControlePresenca.Application.Profiles
+namespace ControlePresenca.Application.Profiles;
+
+public class AlunoProfile : Profile
 {
-    public class AlunoProfile : Profile
+    public AlunoProfile()
     {
-        public AlunoProfile()
-        {
-            CreateMap<CreateAlunoCommand, Aluno>();
-        }
+        CreateMap<CreateAlunoCommand, Aluno>();
     }
 }

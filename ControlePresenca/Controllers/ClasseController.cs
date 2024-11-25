@@ -11,15 +11,9 @@ namespace ControlePresenca.Controllers
 {
     [ApiController]
     [Route("api/classe")]
-    public class ClasseController : ControllerBase
+    public class ClasseController(
+        IClasseQueries classeQueries) : ControllerBase
     {
-        private readonly IClasseQueries _classeQueries;
-
-        public ClasseController(IClasseQueries classeQueries)
-        {
-            _classeQueries = classeQueries;
-        }
-
         [HttpPost]
         [SwaggerOperation(Summary = "Cadastra nova classe",
                           OperationId = "Post")]
@@ -46,7 +40,7 @@ namespace ControlePresenca.Controllers
         [ProducesResponseType(200)]
         public async Task<IActionResult> BuscarTodasClasses()
         {
-            var response = await _classeQueries.GetAllClasses();
+            var response = await classeQueries.GetAllClasses();
             return Ok(response);
         }
 
@@ -56,7 +50,7 @@ namespace ControlePresenca.Controllers
         [ProducesResponseType(200)]
         public async Task<IActionResult> BuscarAlunosPorClasse(int classeId, [FromQuery] int pagina = 1, [FromQuery] int quantidadeItens = 10)
         {
-            var response = await _classeQueries.GetByClass(classeId, pagina, quantidadeItens);
+            var response = await classeQueries.GetByClass(classeId, pagina, quantidadeItens);
 
             if (!response.Any())
                 return NotFound("Classe não encontrada");

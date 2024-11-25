@@ -1,5 +1,4 @@
 ﻿using ControlePresenca.Application.Services;
-using ControlePresenca.AppSettings;
 using ControlePresenca.Domain.Entities;
 using ControlePresenca.Domain.Query;
 using ControlePresenca.Domain.Repository;
@@ -10,7 +9,6 @@ using ControlePresenca.Infra.Repository;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;

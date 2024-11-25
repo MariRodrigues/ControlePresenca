@@ -1,5 +1,4 @@
-﻿using ControlePresenca.Domain.Query;
-using ControlePresenca.Domain.ViewModels.Classes;
+﻿using ControlePresenca.Domain.ViewModels.Classes;
 using ControlePresenca.Infra.Data;
 using Dapper;
 using Microsoft.Data.SqlClient;
@@ -7,17 +6,17 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace ControlePresenca.Infra.Query
+namespace ControlePresenca.Infra.Query;
+
+public class ClasseQueries(AppDbContext context) : IClasseQueries
 {
-    public class ClasseQueries(AppDbContext context) : IClasseQueries
+    private readonly SqlConnection _connection = new SqlConnection(context.Database.GetConnectionString());
+
+    public async Task<IEnumerable<ClasseAlunosViewModel>> GetAll()
     {
-        private readonly SqlConnection _connection = new SqlConnection(context.Database.GetConnectionString());
+        var queryArgs = new DynamicParameters();
 
-        public async Task<IEnumerable<ClasseAlunosViewModel>> GetAll()
-        {
-            var queryArgs = new DynamicParameters();
-
-            var query = @"SELECT
+        var query = @"SELECT
                             c.id as ClasseId, 
                             c.nome,
                             p.nome as Professores_Nome,
@@ -30,18 +29,18 @@ namespace ControlePresenca.Infra.Query
                           LEFT JOIN professores p ON p.classeId = c.Id
                           LEFT JOIN alunos a ON a.classeId = c.Id";
 
-            var result = await _connection.QueryAsync(query, queryArgs);
+        var result = await _connection.QueryAsync(query, queryArgs);
 
-            Slapper.AutoMapper.Configuration.AddIdentifier(typeof(ClasseAlunosViewModel), "ClasseId");
-            Slapper.AutoMapper.Configuration.AddIdentifier(typeof(ProfessorViewModel), "ProfessorId");
-            Slapper.AutoMapper.Configuration.AddIdentifier(typeof(AlunoPresencaViewModel), "AlunoId");
+        Slapper.AutoMapper.Configuration.AddIdentifier(typeof(ClasseAlunosViewModel), "ClasseId");
+        Slapper.AutoMapper.Configuration.AddIdentifier(typeof(ProfessorViewModel), "ProfessorId");
+        Slapper.AutoMapper.Configuration.AddIdentifier(typeof(AlunoPresencaViewModel), "AlunoId");
 
-            return Slapper.AutoMapper.MapDynamic<ClasseAlunosViewModel>(result);
-        }
+        return Slapper.AutoMapper.MapDynamic<ClasseAlunosViewModel>(result);
+    }
 
-        public async Task<IEnumerable<ClasseViewModel>> GetAllClasses()
-        {
-            var query = @"SELECT 
+    public async Task<IEnumerable<ClasseViewModel>> GetAllClasses()
+    {
+        var query = @"SELECT 
                             c.Id, 
                             c.Nome,
                             COUNT(a.ClasseId) AS QuantidadeAlunos
@@ -53,14 +52,14 @@ namespace ControlePresenca.Infra.Query
                             c.Id, 
                             c.Nome;";
 
-            return await _connection.QueryAsync<ClasseViewModel>(query);
-        }
+        return await _connection.QueryAsync<ClasseViewModel>(query);
+    }
 
-        public async Task<IEnumerable<ClasseAlunosViewModel>> GetByClass(int classeId, int pagina, int quantidadeItens)
-        {
-            var queryArgs = new DynamicParameters();
+    public async Task<IEnumerable<ClasseAlunosViewModel>> GetByClass(int classeId, int pagina, int quantidadeItens)
+    {
+        var queryArgs = new DynamicParameters();
 
-            var query = @"SELECT
+        var query = @"SELECT
                             c.id as ClasseId, 
                             c.nome,
                             p.nome as Professores_Nome,
@@ -75,19 +74,25 @@ namespace ControlePresenca.Infra.Query
                           ORDER BY c.id
                           OFFSET @Offset ROWS FETCH NEXT @QuantidadeItens ROWS ONLY";
 
-            var offset = (pagina - 1) * quantidadeItens;
+        var offset = (pagina - 1) * quantidadeItens;
 
-            queryArgs.Add("Offset", offset);
-            queryArgs.Add("QuantidadeItens", quantidadeItens);
-            queryArgs.Add("ClasseId", classeId);
+        queryArgs.Add("Offset", offset);
+        queryArgs.Add("QuantidadeItens", quantidadeItens);
+        queryArgs.Add("ClasseId", classeId);
 
-            var result = await _connection.QueryAsync(query, queryArgs);
+        var result = await _connection.QueryAsync(query, queryArgs);
 
-            Slapper.AutoMapper.Configuration.AddIdentifier(typeof(ClasseAlunosViewModel), "ClasseId");
-            Slapper.AutoMapper.Configuration.AddIdentifier(typeof(ProfessorViewModel), "ProfessorId");
-            Slapper.AutoMapper.Configuration.AddIdentifier(typeof(AlunoPresencaViewModel), "AlunoId");
+        Slapper.AutoMapper.Configuration.AddIdentifier(typeof(ClasseAlunosViewModel), "ClasseId");
+        Slapper.AutoMapper.Configuration.AddIdentifier(typeof(ProfessorViewModel), "ProfessorId");
+        Slapper.AutoMapper.Configuration.AddIdentifier(typeof(AlunoPresencaViewModel), "AlunoId");
 
-            return Slapper.AutoMapper.MapDynamic<ClasseAlunosViewModel>(result);
-        }
+        return Slapper.AutoMapper.MapDynamic<ClasseAlunosViewModel>(result);
     }
+}
+
+public interface IClasseQueries
+{
+    Task<IEnumerable<ClasseAlunosViewModel>> GetAll();
+    Task<IEnumerable<ClasseAlunosViewModel>> GetByClass(int classeId, int pagina, int quantidadeItens);
+    Task<IEnumerable<ClasseViewModel>> GetAllClasses();
 }

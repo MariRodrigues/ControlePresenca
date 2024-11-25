@@ -3,42 +3,40 @@ using ControlePresenca.Application.Commands.Usuarios;
 using ControlePresenca.Application.Response;
 using ControlePresenca.Domain.Entities;
 using ControlePresenca.Domain.Repository;
+using MediatR;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ControlePresenca.Application.Handlers.UsuarioHandlers
+namespace ControlePresenca.Application.Handlers.UsuarioHandlers;
+
+public interface IUsuarioHandler :
+    IRequestHandler<CreateUsuarioCommand, ResponseApi>,
+    IRequestHandler<UpdateUsuarioCommand, ResponseApi>
 {
-    public class UsuarioHandler : IUsuarioHandler
+}
+public class UsuarioHandler(
+    IMapper mapper, 
+    ICustomUsuarioRepository userRepository) : IUsuarioHandler
+{
+    public async Task<ResponseApi> Handle(CreateUsuarioCommand request, CancellationToken cancellationToken)
     {
-        private readonly IMapper _mapper;
-        private readonly ICustomUsuarioRepository _userRepository;
+        var identityUser = mapper.Map<CustomUsuario>(request);
 
-        public UsuarioHandler(IMapper mapper, ICustomUsuarioRepository userRepository)
-        {
-            _mapper = mapper;
-            _userRepository = userRepository;
-        }
+        var user = await userRepository.BuscarPorEmail(request.Email);
+        if (user is not null)
+            return new ResponseApi(false, "E-mail existente.");
 
-        public async Task<ResponseApi> Handle(CreateUsuarioCommand request, CancellationToken cancellationToken)
-        {
-            var identityUser = _mapper.Map<CustomUsuario>(request);
+        var resultIdentity = await userRepository.Cadastrar(identityUser, request.Password);
 
-            var user = await _userRepository.BuscarPorEmail(request.Email);
-            if (user is not null)
-                return new ResponseApi(false, "E-mail existente.");
+        if (!resultIdentity.Succeeded)
+            return new ResponseApi(false, "Não foi possível cadastrar o usuário!");
 
-            var resultIdentity = await _userRepository.Cadastrar(identityUser, request.Password);
+        return new ResponseApi(true, "Usuário cadastrado com sucesso!");
+    }
 
-            if (!resultIdentity.Succeeded)
-                return new ResponseApi(false, "Não foi possível cadastrar o usuário!");
-
-            return new ResponseApi(true, "Usuário cadastrado com sucesso!");
-        }
-
-        public Task<ResponseApi> Handle(UpdateUsuarioCommand request, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
+    public Task<ResponseApi> Handle(UpdateUsuarioCommand request, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
     }
 }

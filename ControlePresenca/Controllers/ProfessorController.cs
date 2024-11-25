@@ -10,7 +10,8 @@ namespace ControlePresenca.Controllers
 {
     [ApiController]
     [Route("api/professor")]
-    public class ProfessorController(IProfessorRepository repository) : ControllerBase
+    public class ProfessorController(
+        IProfessorRepository repository) : ControllerBase
     {
         [HttpPost]
         [SwaggerOperation(Summary = "Cadastra professor",
