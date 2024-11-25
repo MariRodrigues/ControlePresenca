@@ -66,12 +66,11 @@ public static class DatabaseConfiguration
             SecurityStamp = Guid.NewGuid().ToString()
         };
 
-
         PasswordHasher<CustomUsuario> passwordHasher = new();
         admin.PasswordHash = passwordHasher.HashPassword(admin, "Senha@123");
 
-        context.Users.AddRange(admin);
+        await context.Users.AddRangeAsync(admin);
 
-        context.SaveChanges();
+        await context.SaveChangesAsync();
     }
 }

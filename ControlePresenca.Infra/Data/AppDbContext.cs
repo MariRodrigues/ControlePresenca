@@ -5,12 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ControlePresenca.Infra.Data
 {
-    public class AppDbContext : IdentityDbContext<CustomUsuario, IdentityRole<int>, int>
+    public class AppDbContext(
+        DbContextOptions<AppDbContext> opt) : IdentityDbContext<CustomUsuario, IdentityRole<int>, int>(opt)
     {
-        public AppDbContext(DbContextOptions<AppDbContext> opt) : base(opt)
-        {
-        }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

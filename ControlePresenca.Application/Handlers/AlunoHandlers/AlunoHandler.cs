@@ -2,7 +2,7 @@
 using ControlePresenca.Application.Commands.Alunos;
 using ControlePresenca.Application.Response;
 using ControlePresenca.Domain.Entities;
-using ControlePresenca.Domain.Repository;
+using ControlePresenca.Infra.Repository;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;

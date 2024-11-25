@@ -1,5 +1,4 @@
 ﻿using ControlePresenca.Domain.Entities;
-using ControlePresenca.Domain.Repository;
 using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
 

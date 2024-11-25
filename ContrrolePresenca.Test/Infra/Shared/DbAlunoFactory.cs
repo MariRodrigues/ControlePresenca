@@ -2,12 +2,6 @@
 using ControlePresenca.Infra.Data;
 using ControlePresenca.Infra.Query;
 using ControlePresenca.Infra.Repository;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ContrrolePresenca.Test.Infra.Shared
 {

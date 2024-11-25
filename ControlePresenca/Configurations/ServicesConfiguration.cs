@@ -1,8 +1,5 @@
 ﻿using ControlePresenca.Application.Services;
 using ControlePresenca.Domain.Entities;
-using ControlePresenca.Domain.Query;
-using ControlePresenca.Domain.Repository;
-using ControlePresenca.Domain.Services;
 using ControlePresenca.Infra.Data;
 using ControlePresenca.Infra.Query;
 using ControlePresenca.Infra.Repository;
@@ -27,9 +24,9 @@ public static class ServicesConfiguration
         services.AddScoped<IAlunoQueries, AlunoQueries>();
         services.AddScoped<IRelatorioQueries, RelatorioQueries>();
         services.AddScoped<IAlunoRepository, AlunoRepository>();
+        services.AddScoped<IPresencaRepository, PresencaRepository>();
         services.AddScoped<IProfessorRepository, ProfessorRepository>();
         services.AddScoped<IRelatorioRepository, RelatorioRepository>();
-        services.AddScoped<IPresencaRepository, PresencaRepository>();
         services.AddScoped<ICustomUsuarioRepository, CustomUsuarioRepository>();
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<ILoginRepository, LoginRepository>();

@@ -1,7 +1,6 @@
 ﻿using ControlePresenca.Application.Commands.Professores;
-using ControlePresenca.Domain.Repository;
+using ControlePresenca.Infra.Repository;
 using MediatR;
-using Microsoft.AspNetCore.JsonPatch.Operations;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Threading.Tasks;

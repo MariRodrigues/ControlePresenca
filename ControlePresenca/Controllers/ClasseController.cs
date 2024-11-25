@@ -1,5 +1,5 @@
 ﻿using ControlePresenca.Application.Commands.Classes;
-using ControlePresenca.Domain.Query;
+using ControlePresenca.Infra.Query;
 using MediatR;
 using Microsoft.AspNetCore.JsonPatch.Operations;
 using Microsoft.AspNetCore.Mvc;

@@ -1,6 +1,5 @@
 ﻿using ControlePresenca.Application.Requests;
 using ControlePresenca.Application.Services;
-using ControlePresenca.Domain.Services;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Threading.Tasks;

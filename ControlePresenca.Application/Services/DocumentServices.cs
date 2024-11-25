@@ -1,4 +1,4 @@
-﻿using ControlePresenca.Domain.Query;
+﻿using ControlePresenca.Infra.Query;
 using OfficeOpenXml;
 using System.Threading.Tasks;
 

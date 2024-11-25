@@ -1,5 +1,5 @@
 ﻿using ControlePresenca.Application.Commands.Alunos;
-using ControlePresenca.Domain.Query;
+using ControlePresenca.Infra.Query;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
