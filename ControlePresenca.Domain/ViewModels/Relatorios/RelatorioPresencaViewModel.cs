@@ -13,6 +13,7 @@ namespace ControlePresenca.Domain.ViewModels.Relatorios
         public int Id { get; set; }
         public DateTime Data { get; set; }
         public string Observacao { get; set; }
+        public string Professor { get; set; }
         public double Oferta { get; set; }
         public int Presentes { get; set; }
         public int QuantidadeBiblias { get; set; }

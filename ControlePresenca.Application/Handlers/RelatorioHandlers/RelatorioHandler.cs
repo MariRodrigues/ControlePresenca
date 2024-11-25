@@ -86,7 +86,7 @@ namespace ControlePresenca.Application.Handlers.RelatorioHandlers
 
         private static void AtualizarPresencas(List<Presenca> presencas, List<int> alunosPresentesIds, Classe classe, out List<int> erros)
         {
-            erros = new List<int>();
+            erros = [];
 
             foreach (var alunoId in alunosPresentesIds)
             {

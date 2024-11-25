@@ -7,38 +7,37 @@ using Microsoft.AspNetCore.Identity;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ControlePresenca.Application.Services
+namespace ControlePresenca.Application.Services;
+
+public class LoginService
 {
-    public class LoginService
+    private readonly ICustomUsuarioRepository _usuarioManager;
+    private readonly ILoginRepository _loginRepository;
+    private readonly ITokenService _tokenService;
+    private readonly SignInManager<CustomUsuario> _signInManager;
+
+    public LoginService(ICustomUsuarioRepository usuarioManager, ILoginRepository loginRepository, SignInManager<CustomUsuario> signInManager, ITokenService tokenService)
     {
-        private readonly ICustomUsuarioRepository _usuarioManager;
-        private readonly ILoginRepository _loginRepository;
-        private readonly ITokenService _tokenService;
-        private readonly SignInManager<CustomUsuario> _signInManager;
+        _usuarioManager = usuarioManager;
+        _loginRepository = loginRepository;
+        _signInManager = signInManager;
+        _tokenService = tokenService;
+    }
 
-        public LoginService(ICustomUsuarioRepository usuarioManager, ILoginRepository loginRepository, SignInManager<CustomUsuario> signInManager, ITokenService tokenService)
+    public async Task<ResponseApi> LoginUsuario (LoginRequest request)
+    {
+        var usuarioIdentity = await _usuarioManager.BuscarPorEmail(request.Email);
+        
+        var result = await _loginRepository.SignIn(usuarioIdentity.UserName, request.Password);
+
+        if (!result.Succeeded)
+            return new ResponseApi(false, "Não foi possível fazer login");
+
+        Token token = _tokenService.CreateToken(usuarioIdentity);
+
+        return new ResponseApi(true, "Login realizado com sucesso")
         {
-            _usuarioManager = usuarioManager;
-            _loginRepository = loginRepository;
-            _signInManager = signInManager;
-            _tokenService = tokenService;
-        }
-
-        public async Task<ResponseApi> LoginUsuario (LoginRequest request)
-        {
-            var usuarioIdentity = await _usuarioManager.BuscarPorEmail(request.Email);
-            
-            var result = await _loginRepository.SignIn(usuarioIdentity.UserName, request.Password);
-
-            if (!result.Succeeded)
-                return new ResponseApi(false, "Não foi possível fazer login");
-
-            Token token = _tokenService.CreateToken(usuarioIdentity);
-
-            return new ResponseApi(true, "Login realizado com sucesso")
-            {
-                Infos = new { token }
-            };
-        }
+            Infos = new { token }
+        };
     }
 }

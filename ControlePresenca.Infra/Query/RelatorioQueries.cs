@@ -20,7 +20,7 @@ namespace ControlePresenca.Infra.Query
             _connection = new SqlConnection(context.Database.GetConnectionString());
         }
 
-        public async Task<IEnumerable<RelatorioViewModel>> GetAllFilter(int? classeId, DateTime? data, int pagina, int quantidadeItens)
+        public async Task<IEnumerable<RelatorioViewModel>> GetAllFilter(int? classeId, DateTime? startDate, DateTime? endDate, int pagina, int quantidadeItens)
         {
             var queryArgs = new DynamicParameters();
 
@@ -36,11 +36,11 @@ namespace ControlePresenca.Infra.Query
 
                         WHERE ";
 
-            if (data != null)
+            if (startDate != null && endDate != null)
             {
-                query += " MONTH(r.data) = @mes AND YEAR(r.data) = @ano AND ";
-                queryArgs.Add("@mes", data.Value.Month);
-                queryArgs.Add("@ano", data.Value.Year);
+                query += " r.data >= @startDate AND r.data <= @endDate AND ";
+                queryArgs.Add("@startDate", startDate.Value);
+                queryArgs.Add("@endDate", endDate.Value);
             }
 
             if (classeId != null)
@@ -49,7 +49,7 @@ namespace ControlePresenca.Infra.Query
                 queryArgs.Add("classeId", classeId);
             }
 
-            if (data == null && classeId == null)
+            if (startDate == null && classeId == null)
                 query = query.Remove(query.LastIndexOf("WHERE"));
             else
                 query = query.Remove(query.LastIndexOf("AND"));
@@ -86,10 +86,12 @@ namespace ControlePresenca.Infra.Query
                             a.Id as Presencas_AlunoId,
                             p.presente as Presencas_Presente,
                             a.nome as Presencas_Aluno_Nome,
+                            prof.nome as Professor,
                             (SELECT COUNT(*) FROM Presencas WHERE relatorioId = r.id AND presente = 1) as Presentes
                           FROM Relatorios r
                           LEFT JOIN Presencas p ON p.relatorioId = r.id
                           LEFT JOIN Alunos a ON a.id = p.AlunoId
+                          LEFT JOIN Professores prof ON prof.Id = r.ProfessorId
                           WHERE r.id = @RelatorioId;";
 
             var result = await _connection.QueryAsync<dynamic>(query, queryArgs);

@@ -44,9 +44,9 @@ namespace ControlePresenca.Controllers
         [SwaggerOperation(Summary = "Busca todos os relatórios com filtros de Classe e/ou Data",
                           OperationId = "Post")]
         [ProducesResponseType(200)]
-        public async Task<IActionResult> Buscar(int? classeId, DateTime? data, int pagina = 1, int quantidadeItens = 10)
+        public async Task<IActionResult> Buscar(int? classeId, DateTime? startDate, DateTime? endDate, int pagina = 1, int quantidadeItens = 10)
         {
-            var response = await relatorioQueries.GetAllFilter(classeId, data, pagina, quantidadeItens);
+            var response = await relatorioQueries.GetAllFilter(classeId, startDate, endDate, pagina, quantidadeItens);
             return Ok(response);
         }
 
