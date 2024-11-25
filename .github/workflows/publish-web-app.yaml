@@ -14,25 +14,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # Passo 1: Checkout do Repositório
     - name: Checkout Repository
       uses: actions/checkout@v2
 
-    # Passo 2: Configurar o .NET
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: '8.0.x' 
 
-    # Passo 3: Construir o Projeto .NET
     - name: Build .NET Project
       run: dotnet build --configuration Release
 
-    # Passo 4: Publicar o Projeto .NET em uma Pasta para Deploy
     - name: Publish .NET Project
       run: dotnet publish -c Release -o ./publish
 
-    # Passo 5: Fazer Login no Azure com as Credenciais
     - name: Azure Login
       uses: azure/login@v1
       with:
@@ -40,7 +35,6 @@ jobs:
         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-    # Passo 6: Fazer Deploy no Azure Web App
     - name: Deploy to Azure Web App
       uses: azure/webapps-deploy@v2
       with:
