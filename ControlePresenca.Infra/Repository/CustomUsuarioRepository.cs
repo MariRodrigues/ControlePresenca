@@ -7,22 +7,22 @@ namespace ControlePresenca.Infra.Repository;
 public class CustomUsuarioRepository(UserManager<CustomUsuario> userManager) 
     : ICustomUsuarioRepository
 {
-    public async Task<IdentityResult> Cadastrar(CustomUsuario usuario, string passwordHash)
+    public async Task<IdentityResult> AddAsync(CustomUsuario usuario, string passwordHash)
     {
         var result = await userManager.CreateAsync(usuario, passwordHash);
         return result;
     }
 
-    public async Task<IdentityResult> AdicionarRole(CustomUsuario usuario, string role)
+    public async Task<IdentityResult> AddRoleAsync(CustomUsuario usuario, string role)
         => await userManager.AddToRoleAsync(usuario, role);
 
-    public async Task<CustomUsuario> BuscarPorEmail(string email)
+    public async Task<CustomUsuario> GetByEmailAsync(string email)
         => await userManager.FindByEmailAsync(email);
 }
 
 public interface ICustomUsuarioRepository
 {
-    Task<IdentityResult> Cadastrar(CustomUsuario usuario, string passwordHash);
-    Task<IdentityResult> AdicionarRole(CustomUsuario usuario, string role);
-    Task<CustomUsuario> BuscarPorEmail(string email);
+    Task<IdentityResult> AddAsync(CustomUsuario usuario, string passwordHash);
+    Task<IdentityResult> AddRoleAsync(CustomUsuario usuario, string role);
+    Task<CustomUsuario> GetByEmailAsync(string email);
 }

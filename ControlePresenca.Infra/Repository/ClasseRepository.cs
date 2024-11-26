@@ -7,41 +7,41 @@ namespace ControlePresenca.Infra.Repository;
 
 public class ClasseRepository(AppDbContext context) : IClasseRepository
 {
-    public Classe Cadastrar(Classe classe)
+    public async Task<Classe> AddAsync(Classe classe)
     {
-        context.Classes.Add(classe);
-        context.SaveChanges();
+        await context.Classes.AddAsync(classe);
+        await context.SaveChangesAsync();
         return classe;
     }
 
-    public Classe Editar(Classe classe)
+    public async Task<Classe> EditAsync(Classe classe)
     {
         context.Classes.Update(classe);
-        context.SaveChanges();
+        await context.SaveChangesAsync();
         return classe;
     }
 
-    public void Deletar (Classe classe)
+    public async Task DeleteAsync(Classe classe)
     {
         context.Classes.Remove(classe);
-        context.SaveChanges();
+        await context.SaveChangesAsync();
     }
 
-    public async Task<Classe> GetById (int id)
+    public async Task<Classe> GetByIdAsync(int id)
     {
         return await context.Classes.Include(classe => classe.Alunos).
             FirstOrDefaultAsync(c => c.Id == id);
     }
 
-    public async Task<Classe> GetByName(string name)
+    public async Task<Classe> GetByNameAsync(string name)
         => await context.Classes.FirstOrDefaultAsync(c => c.Nome.ToLower() == name.ToLower());
 }
 
 public interface IClasseRepository
 {
-    Task<Classe> GetByName(string name);
-    Classe Cadastrar(Classe classe);
-    Classe Editar(Classe classe);
-    void Deletar(Classe classe);
-    Task<Classe> GetById(int id);
+    Task<Classe> GetByNameAsync(string name);
+    Task<Classe> AddAsync(Classe classe);
+    Task<Classe> EditAsync(Classe classe);
+    Task DeleteAsync(Classe classe);
+    Task<Classe> GetByIdAsync(int id);
 }

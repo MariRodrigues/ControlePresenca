@@ -13,12 +13,12 @@ public class LoginService(
 {
     public async Task<ResponseApi> LoginUsuario (LoginRequest request)
     {
-        var usuarioIdentity = await usuarioManager.BuscarPorEmail(request.Email);
+        var usuarioIdentity = await usuarioManager.GetByEmailAsync(request.Email);
 
         if (usuarioIdentity == null)
             return new ResponseApi(false, "Usuário com esse e-mail não existe");
 
-        var result = await loginRepository.SignIn(usuarioIdentity.UserName, request.Password);
+        var result = await loginRepository.SignInAsync(usuarioIdentity.UserName, request.Password);
 
         if (!result.Succeeded)
             return new ResponseApi(false, "Não foi possível fazer login");

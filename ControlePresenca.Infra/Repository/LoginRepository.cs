@@ -13,7 +13,7 @@ public class LoginRepository : ILoginRepository
         _signInManager = signInManager;
     }
 
-    public async Task<SignInResult> SignIn(string username, string password)
+    public async Task<SignInResult> SignInAsync(string username, string password)
     {
         return await _signInManager.PasswordSignInAsync(username, password, false, false);
     }
@@ -21,5 +21,5 @@ public class LoginRepository : ILoginRepository
 
 public interface ILoginRepository
 {
-    Task<SignInResult> SignIn(string username, string password);
+    Task<SignInResult> SignInAsync(string username, string password);
 }

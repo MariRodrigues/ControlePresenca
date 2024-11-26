@@ -19,7 +19,7 @@ public class ProfessorHandler(
     {
         var professor = mapper.Map<Professor>(request);
 
-        var response = professorRepository.Cadastrar(professor);
+        var response = await professorRepository.AddAsync(professor);
 
         if (response is null)
             return new ResponseApi(false, "Erro ao cadastrar professor");

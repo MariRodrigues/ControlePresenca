@@ -18,14 +18,14 @@ public class AlunoHandler(
 {
     public async Task<ResponseApi> Handle(CreateAlunoCommand request, CancellationToken cancellationToken)
     {
-        var classe = await classeRepository.GetById(request.ClasseId);
+        var classe = await classeRepository.GetByIdAsync(request.ClasseId);
 
         if (classe is null)
             return new ResponseApi(false, "A classe informada não existe");
 
         var aluno = mapper.Map<Aluno>(request);
 
-        var response = alunoRepository.Cadastrar(aluno);
+        var response = await alunoRepository.AddAsync(aluno);
 
         if (response is null)
             return new ResponseApi(false, "Erro ao cadastrar aluno");

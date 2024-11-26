@@ -28,7 +28,7 @@ namespace ControlePresenca.Controllers
         [ProducesResponseType(200)]
         public async Task<IActionResult> GetTeachers([FromServices] IMediator mediator)
         {
-            var response = repository.GetAll();
+            var response = await repository.GetAllAsync();
             return Ok(response);
         }
     }

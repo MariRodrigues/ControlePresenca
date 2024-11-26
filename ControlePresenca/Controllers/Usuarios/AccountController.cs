@@ -18,10 +18,6 @@ namespace ControlePresenca.Controllers.Usuarios
         public async Task<IActionResult> LogaUsuario(LoginRequest request)
         {
             var result = await loginService.LoginUsuario(request);
-
-            if (!result.Success)
-                return Unauthorized(result.Message);
-
             return Ok(result);
         }
     }

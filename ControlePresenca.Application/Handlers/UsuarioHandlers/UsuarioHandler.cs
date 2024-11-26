@@ -23,11 +23,11 @@ public class UsuarioHandler(
     {
         var identityUser = mapper.Map<CustomUsuario>(request);
 
-        var user = await userRepository.BuscarPorEmail(request.Email);
+        var user = await userRepository.GetByEmailAsync(request.Email);
         if (user is not null)
             return new ResponseApi(false, "E-mail existente.");
 
-        var resultIdentity = await userRepository.Cadastrar(identityUser, request.Password);
+        var resultIdentity = await userRepository.AddAsync(identityUser, request.Password);
 
         if (!resultIdentity.Succeeded)
             return new ResponseApi(false, "Não foi possível cadastrar o usuário!");

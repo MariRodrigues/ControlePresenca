@@ -2,6 +2,7 @@
 using ControlePresenca.Infra.Data;
 using ControlePresenca.Infra.Query;
 using ControlePresenca.Infra.Repository;
+using System.Threading.Tasks;
 
 namespace ContrrolePresenca.Test.Infra.Shared
 {
@@ -17,22 +18,22 @@ namespace ContrrolePresenca.Test.Infra.Shared
             return new AlunoQueries(context);
         }
 
-        public static void Create (Aluno aluno)
+        public static async void Create (Aluno aluno)
         {
             var contextRepository = CreateAlunoRepositorio(DbFactory.CreateAppDbContext());
-            contextRepository.Cadastrar(aluno);
+            await contextRepository.AddAsync(aluno);
         }
         
-        public static void Deletar (Aluno aluno)
+        public async static void Deletar (Aluno aluno)
         {
             var contextRepository = CreateAlunoRepositorio(DbFactory.CreateAppDbContext());
-            contextRepository.Deletar(aluno);
+            await contextRepository.DeleteAsync(aluno);
         }
 
-        public static Aluno GetById (int id)
+        public async static Task<Aluno> GetById (int id)
         {
             var contextRepository = CreateAlunoRepositorio(DbFactory.CreateAppDbContext());
-            return contextRepository.GetById(id);
+            return await contextRepository.GetByIdAsync(id);
         }
     }
 }

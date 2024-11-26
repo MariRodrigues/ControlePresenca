@@ -19,7 +19,7 @@ public class ClasseHandler(
 {
     public async Task<ResponseApi> Handle(CreateClasseCommand request, CancellationToken cancellationToken)
     {
-        var existingClass = await classeRepository.GetByName(request.Nome);
+        var existingClass = await classeRepository.GetByNameAsync(request.Nome);
         if (existingClass != null)
         {
             return new ResponseApi(false, "Já existe uma classe com o mesmo nome.");
@@ -27,7 +27,7 @@ public class ClasseHandler(
 
         var classe = mapper.Map<Classe>(request);
 
-        var response = classeRepository.Cadastrar(classe);
+        var response = await classeRepository.AddAsync(classe);
 
         if (response == null)
             return new ResponseApi(false, "Não foi possível cadastrar a classe");
@@ -37,14 +37,14 @@ public class ClasseHandler(
 
     public async Task<ResponseApi> Handle(DeleteClasseCommand request, CancellationToken cancellationToken)
     {
-        var existingClass = await classeRepository.GetById(request.Id);
+        var existingClass = await classeRepository.GetByIdAsync(request.Id);
 
         if (existingClass == null)
         {
             return new ResponseApi(false, "Não existe classe com esse Id.");
         }
 
-        classeRepository.Deletar(existingClass);
+        await classeRepository.DeleteAsync(existingClass);
 
         return new ResponseApi(true, "Classe deletada com sucesso");
     }

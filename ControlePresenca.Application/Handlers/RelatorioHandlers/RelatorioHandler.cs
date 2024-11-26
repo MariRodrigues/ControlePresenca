@@ -25,17 +25,17 @@ public class RelatorioHandler(
 {
     public async Task<ResponseApi> Handle(CreateRelatorioCommand request, CancellationToken cancellationToken)
     {
-        var classe = await classeRepository.GetById(request.ClasseId);
+        var classe = await classeRepository.GetByIdAsync(request.ClasseId);
         if (classe is null)
             return new ResponseApi(false, "A classe informada não existe");
 
-        var professor = professorRepository.GetById(request.ProfessorId);
+        var professor = await professorRepository.GetByIdAsync(request.ProfessorId);
         if (professor is null)
             return new ResponseApi(false, "O professor informado não existe");
 
         var relatorio = mapper.Map<Relatorio>(request);
 
-        var newRelatorio = await relatorioRepository.Cadastrar(relatorio);
+        var newRelatorio = await relatorioRepository.AddAsync(relatorio);
 
         var presencas = CriarListaAlunosComPresencaFalse(newRelatorio.Id, classe);
 
@@ -43,7 +43,7 @@ public class RelatorioHandler(
 
         newRelatorio.Presencas = presencas;
 
-        await relatorioRepository.Editar(newRelatorio);
+        await relatorioRepository.EditAsync(newRelatorio);
 
         if (erros?.Count != 0)
         {
@@ -101,7 +101,7 @@ public class RelatorioHandler(
 
     public async Task<ResponseApi> Handle(UpdateRelatorioCommand request, CancellationToken cancellationToken)
     {
-        var relatorio = await relatorioRepository.GetById(request.Id);
+        var relatorio = await relatorioRepository.GetByIdAsync(request.Id);
 
         if (relatorio is null)
             return new ResponseApi(false, "O relatório não existe.");
@@ -113,7 +113,7 @@ public class RelatorioHandler(
 
         relatorio.Update(request.Data, request.Observacao, request.Oferta, request.QuantidadeBiblias, presencas);
 
-        var response = await relatorioRepository.Editar(relatorio);
+        var response = await relatorioRepository.EditAsync(relatorio);
 
         if (response)
             return new ResponseApi(true, "Relatório atualizado com sucesso");
@@ -123,11 +123,11 @@ public class RelatorioHandler(
 
     private async Task<List<Presenca>> ValidPresenca(int relatrorioId, List<UpdatePresencaDTO> presencaList)
     {
-        List<Presenca> presencas = new();
+        List<Presenca> presencas = [];
 
         foreach (var newPresenca in presencaList)
         {
-            var presenca = await presencaRepository.GetByAlunoRelatorioId(newPresenca.AlunoId, relatrorioId);
+            var presenca = await presencaRepository.GetByAlunoAndRelatorioIdAsync(newPresenca.AlunoId, relatrorioId);
 
             if (presenca is null)
                 return null;

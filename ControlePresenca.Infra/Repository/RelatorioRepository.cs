@@ -8,19 +8,19 @@ namespace ControlePresenca.Infra.Repository;
 
 public class RelatorioRepository(AppDbContext context) : IRelatorioRepository
 {
-    public async Task<Relatorio> Cadastrar(Relatorio relatorio)
+    public async Task<Relatorio> AddAsync(Relatorio relatorio)
     {
-        context.Relatorios.Add(relatorio);
-        context.SaveChanges();
+        await context.Relatorios.AddAsync(relatorio);
+        await context.SaveChangesAsync();
         return relatorio;
     }
 
-    public async Task<Relatorio> GetById(int id)
+    public async Task<Relatorio> GetByIdAsync(int id)
     {
         return await context.Relatorios.FirstOrDefaultAsync(r => r.Id == id);
     }
 
-    public async Task<bool> Editar(Relatorio relatorio)
+    public async Task<bool> EditAsync(Relatorio relatorio)
     {
         try
         {
@@ -28,7 +28,7 @@ public class RelatorioRepository(AppDbContext context) : IRelatorioRepository
             await context.SaveChangesAsync();
             return true;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return false;
         }
@@ -37,7 +37,7 @@ public class RelatorioRepository(AppDbContext context) : IRelatorioRepository
 
 public interface IRelatorioRepository
 {
-    Task<Relatorio> Cadastrar(Relatorio relatorio);
-    Task<Relatorio> GetById(int id);
-    Task<bool> Editar(Relatorio relatorio);
+    Task<Relatorio> AddAsync(Relatorio relatorio);
+    Task<Relatorio> GetByIdAsync(int id);
+    Task<bool> EditAsync(Relatorio relatorio);
 }

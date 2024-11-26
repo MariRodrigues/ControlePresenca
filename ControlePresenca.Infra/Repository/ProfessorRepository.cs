@@ -1,33 +1,35 @@
 ﻿using ControlePresenca.Domain.Entities;
 using ControlePresenca.Infra.Data;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ControlePresenca.Infra.Repository;
 
 public class ProfessorRepository(AppDbContext context) : IProfessorRepository
 {
-    public Professor Cadastrar(Professor professor)
+    public async Task<Professor> AddAsync(Professor professor)
     {
-        context.Professores.Add(professor);
-        context.SaveChanges();
+        await context.Professores.AddAsync(professor);
+        await context.SaveChangesAsync();
         return professor;
     }
 
-    public Professor GetById(int id)
+    public async Task<Professor> GetByIdAsync(int id)
     {
-        return context.Professores.FirstOrDefault(p => p.Id == id);
+        return await context.Professores.FirstOrDefaultAsync(p => p.Id == id);
     }
 
-    public IEnumerable<Professor> GetAll()
+    public async Task<IEnumerable<Professor>> GetAllAsync()
     {
-        return context.Professores.ToList();
+        return await context.Professores.ToListAsync();
     }
 }
 
 public interface IProfessorRepository
 {
-    Professor Cadastrar(Professor professor);
-    Professor GetById(int id);
-    IEnumerable<Professor> GetAll();
+    Task<Professor> AddAsync(Professor professor);
+    Task<Professor> GetByIdAsync(int id);
+    Task<IEnumerable<Professor>> GetAllAsync();
 }
