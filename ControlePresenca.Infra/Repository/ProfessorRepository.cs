@@ -1,8 +1,7 @@
 ﻿using ControlePresenca.Domain.Entities;
 using ControlePresenca.Infra.Data;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace ControlePresenca.Infra.Repository;
