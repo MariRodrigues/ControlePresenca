@@ -1,4 +1,6 @@
 using ControlePresenca.Configurations;
+using ControlePresenca.Infra.Data.Interceptors;
+using ControlePresenca.Middlewares;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -10,7 +12,13 @@ builder.Services.AddServices(builder.Configuration);
 builder.Services.AddControlePresencaDbContext();
 builder.Services.AddAuthenticationSettings(builder.Configuration);
 
+builder.Services.AddScoped<AuditSaveChangesInterceptor>();
+builder.Services.AddScoped<MultiTenantSaveChangesInterceptor>();
+
 builder.Services.AddControllers();
+
+builder.Services.AddTransient<TenantMiddleware>();
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddEndpointsApiExplorer();
 
 var app = builder.Build();
@@ -28,8 +36,10 @@ app.UseAuthentication();
 
 app.UseAuthorization();
 
+app.UseMiddleware<TenantMiddleware>();
+
 app.MapControllers();
 
-app.Initialize();
+//app.Initialize();
 
 app.Run();

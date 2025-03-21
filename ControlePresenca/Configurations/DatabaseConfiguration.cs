@@ -58,6 +58,7 @@ public static class DatabaseConfiguration
     {
         CustomUsuario admin = new()
         {
+            TenantId = 1,
             Name = "Usuario Admin",
             UserName = "admin",
             Email = "admin@hotmail.com",

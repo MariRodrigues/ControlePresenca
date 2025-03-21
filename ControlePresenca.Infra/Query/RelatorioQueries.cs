@@ -1,5 +1,6 @@
 ﻿using ControlePresenca.Domain.ViewModels.Relatorios;
 using ControlePresenca.Infra.Data;
+using ControlePresenca.Infra.Helpers;
 using Dapper;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -10,16 +11,24 @@ using System.Threading.Tasks;
 
 namespace ControlePresenca.Infra.Query;
 
-public class RelatorioQueries(
-    AppDbContext context) : IRelatorioQueries
+public class RelatorioQueries : IRelatorioQueries
 {
-    private readonly SqlConnection _connection = new(context.Database.GetConnectionString());
+    private readonly DynamicParameters _queryArgs = new();
+    private readonly SqlConnection _connection;
+
+    public RelatorioQueries(
+        AppDbContext context,
+        IUserContext userContext)
+    {
+        var tenantId = userContext.GetCurrentTenantId().ToString();
+        _connection = new(context.Database.GetConnectionString());
+
+        _queryArgs.Add("TenantId", tenantId);
+    }
 
     public async Task<IEnumerable<RelatorioViewModel>> GetAllFilter(
         int? classeId, DateTime? startDate, DateTime? endDate, int pagina, int quantidadeItens)
     {
-        var queryArgs = new DynamicParameters();
-
         var query = @"SELECT
                            r.id as RelatorioId, 
                            r.data,
@@ -30,19 +39,19 @@ public class RelatorioQueries(
                         INNER JOIN Classes c ON c.ID = r.ClasseId
                         LEFT JOIN Presencas p ON p.RelatorioId = r.Id AND p.Presente = 1
 
-                        WHERE ";
+                        WHERE r.TenantId = @TenantId AND ";
 
         if (startDate != null && endDate != null)
         {
             query += " r.data >= @startDate AND r.data <= @endDate AND ";
-            queryArgs.Add("@startDate", startDate.Value);
-            queryArgs.Add("@endDate", endDate.Value);
+            _queryArgs.Add("@startDate", startDate.Value);
+            _queryArgs.Add("@endDate", endDate.Value);
         }
 
         if (classeId != null)
         {
             query += " r.ClasseId = @classeId AND ";
-            queryArgs.Add("classeId", classeId);
+            _queryArgs.Add("classeId", classeId);
         }
 
         if (startDate == null && classeId == null)
@@ -57,20 +66,18 @@ public class RelatorioQueries(
             query += " ORDER BY r.id OFFSET @Offset ROWS FETCH NEXT @QuantidadeItens ROWS ONLY";
 
             var offset = (pagina - 1) * quantidadeItens;
-            queryArgs.Add("Offset", offset);
-            queryArgs.Add("QuantidadeItens", quantidadeItens);
+            _queryArgs.Add("Offset", offset);
+            _queryArgs.Add("QuantidadeItens", quantidadeItens);
         }
 
-        var result = await _connection.QueryAsync<RelatorioViewModel>(query, queryArgs);
+        var result = await _connection.QueryAsync<RelatorioViewModel>(query, _queryArgs);
 
         return result;
     }
 
     public async Task<RelatorioPresencaViewModel> GetRelatorioById(int relatorioId)
     {
-        var queryArgs = new DynamicParameters();
-
-        queryArgs.Add("RelatorioId", relatorioId);
+        _queryArgs.Add("RelatorioId", relatorioId);
 
         var query = @"SELECT
                             r.Id, 
@@ -88,9 +95,9 @@ public class RelatorioQueries(
                           LEFT JOIN Presencas p ON p.relatorioId = r.id
                           LEFT JOIN Alunos a ON a.id = p.AlunoId
                           LEFT JOIN Professores prof ON prof.Id = r.ProfessorId
-                          WHERE r.id = @RelatorioId;";
+                          WHERE r.TenantId = @TenantId AND r.id = @RelatorioId;";
 
-        var result = await _connection.QueryAsync<dynamic>(query, queryArgs);
+        var result = await _connection.QueryAsync<dynamic>(query, _queryArgs);
 
         return Slapper.AutoMapper.MapDynamic<RelatorioPresencaViewModel>(result).FirstOrDefault();
     }
@@ -113,10 +120,11 @@ public class RelatorioQueries(
                              INNER JOIN Alunos a ON a.Id = p.AlunoId
                              INNER JOIN Professores prof ON prof.Id = r.ProfessorId
                              INNER JOIN Classes c ON c.id = r.ClasseId
-
+                                
+                             WHERE r.TenantId = @TenantId
                              ORDER BY r.Data DESC";
 
-        var result = await _connection.QueryAsync<GeneralRelatorioViewModel>(query);
+        var result = await _connection.QueryAsync<GeneralRelatorioViewModel>(query, _queryArgs);
 
         return result;
     }

@@ -1,6 +1,7 @@
 ﻿using ControlePresenca.Application.Commands.Professores;
 using ControlePresenca.Infra.Repository;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ namespace ControlePresenca.Controllers
 {
     [ApiController]
     [Route("api/professor")]
+    [Authorize]
     public class ProfessorController(
         IProfessorRepository repository) : ControllerBase
     {

@@ -1,7 +1,4 @@
-﻿using ControlePresenca.Domain.ViewModels.Alunos;
-using ControlePresenca.Domain.ViewModels.Relatorios;
-using System.Collections.Generic;
-
+﻿using System.Collections.Generic;
 
 namespace ControlePresenca.Domain.ViewModels.Classes
 {

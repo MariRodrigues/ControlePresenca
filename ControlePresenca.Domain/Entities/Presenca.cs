@@ -1,11 +1,15 @@
-﻿namespace ControlePresenca.Domain.Entities;
+﻿using ControlePresenca.Domain.Interfaces;
 
-public class Presenca
+namespace ControlePresenca.Domain.Entities;
+
+public class Presenca : AuditableEntity, IMultiTenantEntity
 {
-    public int Id { get; set; }
+    public int TenantId { get; set; }
     public virtual Aluno Aluno { get; set; }
     public int AlunoId { get; set; }
     public virtual Relatorio Relatorio { get; set; }
     public int RelatorioId { get; set; }
     public bool Presente { get; set; } = false;
+
+    public virtual Tenant Tenant { get; set; }
 }

@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 using MediatR;
 using System;
 using ControlePresenca.Infra.Query;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ControlePresenca.Controllers;
 
 [ApiController]
 [Route("api/relatorio")]
+[Authorize]
 public class RelatorioController(
     IRelatorioQueries relatorioQueries, 
     IDocumentServices documentServices) : ControllerBase
@@ -18,7 +20,7 @@ public class RelatorioController(
     [HttpPost]
     [ProducesResponseType(200)]
     [SwaggerOperation(Summary = "Cadastra novo relatório",
-                      OperationId = "Post")]
+                      OperationId = "Cadastrar")]
     public async Task<IActionResult> Cadastrar([FromServices] IMediator mediator, CreateRelatorioCommand command)
     {
         var response = await mediator.Send(command);
@@ -33,7 +35,7 @@ public class RelatorioController(
 
     [HttpPut]
     [SwaggerOperation(Summary = "Edita relatório",
-                      OperationId = "Put")]
+                      OperationId = "Editar")]
     [ProducesResponseType(200)]
     public async Task<IActionResult> Editar([FromServices] IMediator mediator, UpdateRelatorioCommand command)
     {
@@ -43,7 +45,7 @@ public class RelatorioController(
 
     [HttpGet]
     [SwaggerOperation(Summary = "Busca todos os relatórios com filtros de Classe e/ou Data",
-                      OperationId = "Post")]
+                      OperationId = "Buscar")]
     [ProducesResponseType(200)]
     public async Task<IActionResult> Buscar(
         int? classeId, 
@@ -58,7 +60,7 @@ public class RelatorioController(
 
     [HttpGet("geral/planilha")]
     [SwaggerOperation(Summary = "Busca o relatório e gera um arquivo XLSX",
-                      OperationId = "Get")]
+                      OperationId = "GerarXlsx")]
     [ProducesResponseType(200)]
     public async Task<IActionResult> GerarXlsx()
     {
@@ -69,7 +71,7 @@ public class RelatorioController(
 
     [HttpGet("{relatorioId}")]
     [SwaggerOperation(Summary = "Busca relatório por Id",
-                      OperationId = "Post")]
+                      OperationId = "BuscarPorId")]
     [ProducesResponseType(200)]
     public async Task<IActionResult> BuscarPorId(int relatorioId)
     {

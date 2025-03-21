@@ -1,4 +1,5 @@
 ﻿using ControlePresenca.Domain.Entities;
+using Microsoft.AspNet.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
@@ -18,8 +19,10 @@ public class TokenService : ITokenService
     {
         Claim[] direitosUsuario =
         [
+            new("userId", usuario.Id.ToString()),
             new("username", usuario.UserName),
             new("email", usuario.Email),
+            new("tenantId", usuario.TenantId.ToString()),
             new("name", usuario.Name.ToString())
         ];
 

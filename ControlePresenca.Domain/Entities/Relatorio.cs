@@ -1,12 +1,13 @@
-﻿using System;
+﻿using ControlePresenca.Domain.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace ControlePresenca.Domain.Entities;
 
-public class Relatorio
+public class Relatorio : AuditableEntity, IMultiTenantEntity
 {
-    public int Id { get; set; }
+    public int TenantId { get; set; }
     public DateTime Data { get; set; }
     public string Observacao { get; set; }
     public virtual Classe Classe { get; set; }
@@ -19,6 +20,7 @@ public class Relatorio
     public int ClasseId { get; set; }
     [JsonIgnore]
     public virtual List<Presenca> Presencas { get; set; }
+    public virtual Tenant Tenant { get; set; }
 
     public void Update(DateTime data, string observacao, double oferta, int quantidadeBiblias, List<Presenca> presencas)
     {

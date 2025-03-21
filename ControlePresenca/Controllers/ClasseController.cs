@@ -1,6 +1,7 @@
 ﻿using ControlePresenca.Application.Commands.Classes;
 using ControlePresenca.Infra.Query;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch.Operations;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -11,6 +12,7 @@ namespace ControlePresenca.Controllers
 {
     [ApiController]
     [Route("api/classe")]
+    [Authorize]
     public class ClasseController(
         IClasseQueries classeQueries) : ControllerBase
     {
@@ -36,7 +38,7 @@ namespace ControlePresenca.Controllers
 
         [HttpGet]
         [SwaggerOperation(Summary = "Busca todas as classes",
-                          OperationId = "Get")]
+                          OperationId = "BuscarTodasClasses")]
         [ProducesResponseType(200)]
         public async Task<IActionResult> BuscarTodasClasses()
         {
@@ -46,7 +48,7 @@ namespace ControlePresenca.Controllers
 
         [HttpGet("{classeId}/alunos")]
         [SwaggerOperation(Summary = "Buscar alunos por Classe",
-                          OperationId = "Get")]
+                          OperationId = "BuscarAlunosPorClasse")]
         [ProducesResponseType(200)]
         public async Task<IActionResult> BuscarAlunosPorClasse(int classeId, [FromQuery] int pagina = 1, [FromQuery] int quantidadeItens = 10)
         {

@@ -1,5 +1,6 @@
 ﻿using ControlePresenca.Domain.ViewModels.Classes;
 using ControlePresenca.Infra.Data;
+using ControlePresenca.Infra.Helpers;
 using Dapper;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -8,14 +9,23 @@ using System.Threading.Tasks;
 
 namespace ControlePresenca.Infra.Query;
 
-public class ClasseQueries(AppDbContext context) : IClasseQueries
+public class ClasseQueries : IClasseQueries
 {
-    private readonly SqlConnection _connection = new SqlConnection(context.Database.GetConnectionString());
+    private readonly DynamicParameters _queryArgs = new();
+    private readonly SqlConnection _connection;
+
+    public ClasseQueries(
+        AppDbContext context,
+        IUserContext userContext)
+    {
+        var tenantId = userContext.GetCurrentTenantId().ToString();
+        _connection = new(context.Database.GetConnectionString());
+
+        _queryArgs.Add("TenantId", tenantId);
+    }
 
     public async Task<IEnumerable<ClasseAlunosViewModel>> GetAll()
     {
-        var queryArgs = new DynamicParameters();
-
         var query = @"SELECT
                             c.id as ClasseId, 
                             c.nome,
@@ -27,9 +37,11 @@ public class ClasseQueries(AppDbContext context) : IClasseQueries
                             (SELECT COUNT(*) FROM relatorios WHERE classeId = c.id) as QuantidadeRelatorios
                           FROM classes c
                           LEFT JOIN professores p ON p.classeId = c.Id
-                          LEFT JOIN alunos a ON a.classeId = c.Id";
+                          LEFT JOIN alunos a ON a.classeId = c.Id
 
-        var result = await _connection.QueryAsync(query, queryArgs);
+                          WHERE c.TenantId = @TenantId";
+
+        var result = await _connection.QueryAsync(query, _queryArgs);
 
         Slapper.AutoMapper.Configuration.AddIdentifier(typeof(ClasseAlunosViewModel), "ClasseId");
         Slapper.AutoMapper.Configuration.AddIdentifier(typeof(ProfessorViewModel), "ProfessorId");
@@ -48,17 +60,16 @@ public class ClasseQueries(AppDbContext context) : IClasseQueries
                             Classes c
                         LEFT JOIN 
                             Alunos a ON a.ClasseId = c.Id
+                        WHERE c.TenantId = @TenantId
                         GROUP BY 
                             c.Id, 
                             c.Nome;";
 
-        return await _connection.QueryAsync<ClasseViewModel>(query);
+        return await _connection.QueryAsync<ClasseViewModel>(query, _queryArgs);
     }
 
     public async Task<IEnumerable<ClasseAlunosViewModel>> GetByClass(int classeId, int pagina, int quantidadeItens)
     {
-        var queryArgs = new DynamicParameters();
-
         var query = @"SELECT
                             c.id as ClasseId, 
                             c.nome,
@@ -70,17 +81,19 @@ public class ClasseQueries(AppDbContext context) : IClasseQueries
                           FROM classes c
                           LEFT JOIN professores p ON p.classeId = c.Id
                           LEFT JOIN alunos a ON a.classeId = c.Id
-                          WHERE c.Id = @ClasseId
+                          WHERE 
+                          c.tenantId = @TenantId
+                          AND c.Id = @ClasseId
                           ORDER BY c.id
                           OFFSET @Offset ROWS FETCH NEXT @QuantidadeItens ROWS ONLY";
 
         var offset = (pagina - 1) * quantidadeItens;
 
-        queryArgs.Add("Offset", offset);
-        queryArgs.Add("QuantidadeItens", quantidadeItens);
-        queryArgs.Add("ClasseId", classeId);
+        _queryArgs.Add("Offset", offset);
+        _queryArgs.Add("QuantidadeItens", quantidadeItens);
+        _queryArgs.Add("ClasseId", classeId);
 
-        var result = await _connection.QueryAsync(query, queryArgs);
+        var result = await _connection.QueryAsync(query, _queryArgs);
 
         Slapper.AutoMapper.Configuration.AddIdentifier(typeof(ClasseAlunosViewModel), "ClasseId");
         Slapper.AutoMapper.Configuration.AddIdentifier(typeof(ProfessorViewModel), "ProfessorId");

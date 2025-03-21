@@ -1,6 +1,7 @@
 ﻿using ControlePresenca.Application.Services;
 using ControlePresenca.Domain.Entities;
 using ControlePresenca.Infra.Data;
+using ControlePresenca.Infra.Helpers;
 using ControlePresenca.Infra.Query;
 using ControlePresenca.Infra.Repository;
 using FluentValidation;
@@ -32,6 +33,8 @@ public static class ServicesConfiguration
         services.AddScoped<ILoginRepository, LoginRepository>();
         services.AddScoped<LoginService, LoginService>();
         services.AddScoped<IDocumentServices, DocumentServices>();
+
+        services.AddScoped<IUserContext, UserContext>();
 
         services.AddSwaggerGen(c =>
         {

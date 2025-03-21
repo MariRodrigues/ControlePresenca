@@ -11,7 +11,7 @@ services:
       - "1433:1433"
 
   controle-presenca-api:
-    image: marisouzas2/verbalizeapi:latest
+    image: marisouzas2/controlepresenca:latest
     container_name: controle-presenca-api
     ports:
       - "6000:80"
@@ -20,5 +20,3 @@ services:
     environment:
       - "ConnectionStrings__ControlePresencaDataBase=Server=database,1433;Database=controlepresenca-db;trusted_connection=false;User Id=sa;Password=Pa55w0rd2019;Persist Security Info=False;Encrypt=False"
       - "ASPNETCORE_ENVIRONMENT=Development"
-
-

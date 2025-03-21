@@ -1,4 +1,5 @@
 ﻿using ControlePresenca.Infra.Data;
+using ControlePresenca.Infra.Data.Interceptors;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,9 @@ namespace ContrrolePresenca.Test.Infra.Shared
             var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>()
                 .UseSqlServer("server=localhost;database=controlePresencaDb;user=root;password=root").Options;
 
-            return new AppDbContext(optionsBuilder);
+            var interceptor = new AuditSaveChangesInterceptor();
+
+            return new AppDbContext(optionsBuilder, interceptor);
         }
     }
 }

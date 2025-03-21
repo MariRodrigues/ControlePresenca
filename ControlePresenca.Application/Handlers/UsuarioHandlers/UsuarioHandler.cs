@@ -2,6 +2,7 @@
 using ControlePresenca.Application.Commands.Usuarios;
 using ControlePresenca.Application.Response;
 using ControlePresenca.Domain.Entities;
+using ControlePresenca.Infra.Helpers;
 using ControlePresenca.Infra.Repository;
 using MediatR;
 using System;
@@ -13,15 +14,19 @@ namespace ControlePresenca.Application.Handlers.UsuarioHandlers;
 public interface IUsuarioHandler :
     IRequestHandler<CreateUsuarioCommand, ResponseApi>,
     IRequestHandler<UpdateUsuarioCommand, ResponseApi>
-{
-}
+{ }
+
 public class UsuarioHandler(
     IMapper mapper, 
-    ICustomUsuarioRepository userRepository) : IUsuarioHandler
+    ICustomUsuarioRepository userRepository,
+    IUserContext userContext) : IUsuarioHandler
 {
     public async Task<ResponseApi> Handle(CreateUsuarioCommand request, CancellationToken cancellationToken)
     {
         var identityUser = mapper.Map<CustomUsuario>(request);
+
+        var tenantId = userContext.GetCurrentTenantId();
+        identityUser.TenantId = tenantId.Value;
 
         var user = await userRepository.GetByEmailAsync(request.Email);
         if (user is not null)

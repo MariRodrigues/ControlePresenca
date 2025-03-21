@@ -10,24 +10,17 @@ namespace ControlePresenca.Controllers.Usuarios
 {
     [ApiController]
     [Route("api/usuario")]
-    public class UsuariosController : ControllerBase
+    [Authorize]
+    public class UsuariosController(IMediator mediator) : ControllerBase
     {
-        private readonly IMediator _mediator;
-
-        public UsuariosController(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
-
         [HttpPost]
         [SwaggerOperation(Summary = "Cadastra usuário",
                           OperationId = "Post")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
-        [AllowAnonymous]
         public async Task<IActionResult> CadastrarUsuario([FromBody] CreateUsuarioCommand userDto)
         {
-            return Ok(await _mediator.Send(userDto));
+            return Ok(await mediator.Send(userDto));
         }
     }
 }
