@@ -1,0 +1,20 @@
+name: Deploy na VPS
+
+on:
+  workflow_dispatch:  # Só roda manualmente quando você quiser
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Deploy na VPS via SSH
+      uses: appleboy/ssh-action@v0.1.10
+      with:
+        host: ${{ secrets.VPS_HOST }}
+        username: root
+        password: ${{ secrets.VPS_PASSWORD }}
+        script: |
+          cd /root
+          docker compose pull
+          docker compose up -d
