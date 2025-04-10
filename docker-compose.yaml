@@ -14,9 +14,9 @@ services:
     image: marisouzas2/controlepresenca:latest
     container_name: controle-presenca-api
     ports:
-      - "6000:80"
+      - "5001:8080"
     depends_on:
       - database
     environment:
-      - "ConnectionStrings__ControlePresencaDataBase=Server=database,1433;Database=controlepresenca-db;trusted_connection=false;User Id=sa;Password=Pa55w0rd2019;Persist Security Info=False;Encrypt=False"
+      - "ConnectionStrings__ControlePresencaDataBase=Server=database,1433;Database=controle-presenca-db;trusted_connection=false;User Id=sa;Password=Pa55w0rd2019;Persist Security Info=False;Encrypt=False"
       - "ASPNETCORE_ENVIRONMENT=Development"

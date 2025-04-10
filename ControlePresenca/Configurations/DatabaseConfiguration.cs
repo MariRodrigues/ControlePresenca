@@ -32,29 +32,28 @@ public static class DatabaseConfiguration
         using var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<CustomUsuario>>();
         using var roleManager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole<int>>>();
 
+        try
         {
-            try
-            {
-                Console.WriteLine("Trying to create and migrate database");
-                context.Database.Migrate();
-            }
-            catch (SqlException exception) when (exception.Number == 1801)
-            {
-                Console.WriteLine("Database already exists.");
-            }
-
-            context.SaveChanges();
+            Console.WriteLine("Trying to create and migrate database");
+            context.Database.Migrate();
+        }
+        catch (SqlException exception) when (exception.Number == 1801)
+        {
+            Console.WriteLine("Database already exists.");
         }
 
-        if (userManager.Users.Any())
-        {
-            return;
-        }
+        context.SaveChanges();
 
-        Task.Run(() => CreateUsers(userManager, context)).Wait();
+        //if (userManager.Users.Any())
+        //{
+        //    return;
+        //}
+
+        //Task.Run(() => CreateTenant(context).Wait());
+        //Task.Run(() => CreateUsers(context)).Wait();
     }
 
-    private static async Task CreateUsers(UserManager<CustomUsuario> userManager, AppDbContext context)
+    private static async Task CreateUsers(AppDbContext context)
     {
         CustomUsuario admin = new()
         {
@@ -72,6 +71,17 @@ public static class DatabaseConfiguration
 
         await context.Users.AddRangeAsync(admin);
 
+        await context.SaveChangesAsync();
+    }
+
+    private static async Task CreateTenant(AppDbContext context)
+    {
+        var tenant = new Tenant()
+        {
+            Name = "MasterTenant"
+        };
+
+        await context.Set<Tenant>().AddAsync(tenant);
         await context.SaveChangesAsync();
     }
 }

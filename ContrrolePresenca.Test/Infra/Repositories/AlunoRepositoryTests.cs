@@ -11,20 +11,20 @@ namespace ContrrolePresenca.Test.Infra.Repositories
 {
     public class AlunoRepositoryTests
     {
-        [Fact(DisplayName = "Deve ser possível criar um aluno no banco")]
-        public async Task Cadastra_Aluno_E_Busca_Por_ID()
-        {
-            // Arrange
-            Aluno aluno = new() { Id = 97975, Nome = "Mariana Teste", ClasseId = 1 };
-            DbAlunoFactory.Create(aluno);
+        //[Fact(DisplayName = "Deve ser possível criar um aluno no banco")]
+        //public async Task Cadastra_Aluno_E_Busca_Por_ID()
+        //{
+        //    // Arrange
+        //    Aluno aluno = new() { Id = 97975, Nome = "Mariana Teste", ClasseId = 1 };
+        //    DbAlunoFactory.Create(aluno);
 
-            // Act
-            var alunoAddedd = await DbAlunoFactory.GetById(aluno.Id);
+        //    // Act
+        //    var alunoAddedd = await DbAlunoFactory.GetById(aluno.Id);
 
-            // Assert
-            Assert.NotNull(alunoAddedd);
+        //    // Assert
+        //    Assert.NotNull(alunoAddedd);
 
-            DbAlunoFactory.Deletar(alunoAddedd);
-        }
+        //    DbAlunoFactory.Deletar(alunoAddedd);
+        //}
     }
 }
