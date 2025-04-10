@@ -47,7 +47,7 @@ namespace ControlePresenca.Controllers
         }
 
         [HttpGet("{classeId}/alunos")]
-        [SwaggerOperation(Summary = "Buscar alunos por Classe",
+        [SwaggerOperation(Summary = "Get students by class",
                           OperationId = "BuscarAlunosPorClasse")]
         [ProducesResponseType(200)]
         public async Task<IActionResult> BuscarAlunosPorClasse(int classeId, [FromQuery] int pagina = 1, [FromQuery] int quantidadeItens = 10)
