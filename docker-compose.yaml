@@ -20,3 +20,9 @@ services:
     environment:
       - "ConnectionStrings__ControlePresencaDataBase=Server=database,1433;Database=controle-presenca-db;trusted_connection=false;User Id=sa;Password=Pa55w0rd2019;Persist Security Info=False;Encrypt=False"
       - "ASPNETCORE_ENVIRONMENT=Development"
+    networks:
+      - app-network
+      
+networks:
+  app-network:
+    external: true
